@@ -11,7 +11,7 @@ import {
   UpdateCartItemRequest,
   Product,
 } from '../models/cart.interface';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 

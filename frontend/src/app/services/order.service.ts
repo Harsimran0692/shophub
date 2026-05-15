@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Order, CreateOrderRequest } from '.././models/order.interface';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environments/environment';
 
 export interface OrderQueryParams {
   page?: number;

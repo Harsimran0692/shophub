@@ -9,7 +9,7 @@ import {
   CategorySpec,
   Review,
 } from '../models/product.interface';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 export interface ProductQueryParams {

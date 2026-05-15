@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 // Middlewares
 app.use(
   cors({
-    origin: ["http://localhost:4200"],
+    origin: process.env.FRONTEND_URL || "http://localhost:4200",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

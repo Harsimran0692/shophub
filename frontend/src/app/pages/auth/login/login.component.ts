@@ -11,7 +11,7 @@ import { AuthService } from '../../../services/auth.service';
 // import { GoogleIdentityService } from '../../../services/google-identity.service';
 import { GoogleUser } from '../../../models/user.interface';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environment/environment';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
