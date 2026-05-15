@@ -17,24 +17,24 @@ import {
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './cart.component.html',
-  styles: [
-    `
-      .page-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 1rem;
-      }
-      .btn-primary {
-        @apply bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors;
-      }
-      .btn-outline {
-        @apply border border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors;
-      }
-      .loading-spinner {
-        @apply border-4 border-primary-600 border-t-transparent rounded-full animate-spin;
-      }
-    `,
-  ],
+  // styles: [
+  //   `
+  //     .page-container {
+  //       max-width: 1200px;
+  //       margin: 0 auto;
+  //       padding: 0 1rem;
+  //     }
+  //     .btn-primary {
+  //       @apply bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors;
+  //     }
+  //     .btn-outline {
+  //       @apply border border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors;
+  //     }
+  //     .loading-spinner {
+  //       @apply border-4 border-primary-600 border-t-transparent rounded-full animate-spin;
+  //     }
+  //   `,
+  // ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartComponent {
