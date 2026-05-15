@@ -1,0 +1,873 @@
+<div
+  class="min-h-screen text-stone-200"
+  style="
+    background-color: #1c1917;
+    font-family: 'Georgia', 'Times New Roman', serif;
+  "
+  *ngIf="product"
+>
+  <!-- Breadcrumb -->
+  <div style="background-color: #1c1917; border-bottom: 1px solid #2d2926">
+    <div
+      class="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center gap-2 text-xs tracking-[0.18em] uppercase"
+      style="color: #6b6560"
+    >
+      <a routerLink="/" class="hover:text-amber-400 transition-colors">Home</a>
+      <span style="color: #3d3733">›</span>
+      <a routerLink="/products" class="hover:text-amber-400 transition-colors"
+        >Products</a
+      >
+      <span style="color: #3d3733">›</span>
+      <span
+        class="truncate max-w-xs normal-case tracking-normal"
+        style="color: #a09890"
+        >{{ product.name }}</span
+      >
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 md:px-10 py-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
+      <!-- ── IMAGE SECTION ── -->
+      <div class="lg:sticky lg:top-8 flex flex-col gap-3">
+        <!-- Main image viewport: square aspect, not too tall -->
+        <div
+          class="relative overflow-hidden group"
+          style="aspect-ratio: 1/1; background-color: #252220"
+        >
+          <!-- Carousel: each slide is 100% of the viewport width, strip is N×100% wide -->
+          <div
+            class="flex h-full transition-transform duration-500 ease-in-out"
+            [style.width.%]="product.images.length * 100"
+            [style.transform]="
+              'translateX(-' +
+              activeImageIndex * (100 / product.images.length) +
+              '%)'
+            "
+          >
+            <div
+              *ngFor="let img of product.images"
+              class="h-full shrink-0"
+              [style.width.%]="100 / product.images.length"
+            >
+              <img
+                [src]="
+                  img.url ||
+                  'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'
+                "
+                [alt]="img.altText || product.name"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
+              />
+            </div>
+          </div>
+
+          <!-- Bottom gradient -->
+          <div
+            class="absolute inset-x-0 bottom-0 h-20 pointer-events-none"
+            style="
+              background: linear-gradient(
+                to top,
+                rgba(28, 25, 23, 0.5),
+                transparent
+              );
+            "
+          ></div>
+
+          <!-- Deal badge -->
+          <div
+            *ngIf="product.isDeal"
+            class="absolute top-4 left-0 text-stone-950 text-[10px] font-bold tracking-[0.2em] uppercase px-4 py-1.5 bg-amber-500"
+          >
+            Deal
+          </div>
+
+          <!-- Prev / Next — only when multiple images -->
+          <ng-container *ngIf="product.images.length > 1">
+            <button
+              (click)="prevImage()"
+              [disabled]="activeImageIndex === 0"
+              class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center backdrop-blur-sm border text-stone-300 hover:text-amber-400 hover:border-amber-500/60 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200"
+              style="
+                background-color: rgba(28, 25, 23, 0.75);
+                border-color: #3d3733;
+              "
+            >
+              <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M10 3L6 8l4 5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <button
+              (click)="nextImage()"
+              [disabled]="activeImageIndex === product.images.length - 1"
+              class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center backdrop-blur-sm border text-stone-300 hover:text-amber-400 hover:border-amber-500/60 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200"
+              style="
+                background-color: rgba(28, 25, 23, 0.75);
+                border-color: #3d3733;
+              "
+            >
+              <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M6 3l4 5-4 5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+
+            <!-- Counter -->
+            <div
+              class="absolute bottom-4 right-4 backdrop-blur-sm border text-stone-400 text-xs tracking-[0.15em] px-2.5 py-1 font-mono"
+              style="
+                background-color: rgba(28, 25, 23, 0.75);
+                border-color: rgba(61, 55, 51, 0.7);
+              "
+            >
+              {{ activeImageIndex + 1 }}/{{ product.images.length }}
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- Thumbnail strip — only when multiple images -->
+        <div
+          *ngIf="product.images.length > 1"
+          class="flex gap-2 overflow-x-auto pb-1"
+        >
+          <button
+            *ngFor="let img of product.images; let i = index"
+            (click)="activeImageIndex = i"
+            class="shrink-0 w-16 h-16 overflow-hidden border-2 transition-all duration-200"
+            [ngClass]="
+              activeImageIndex === i
+                ? 'border-amber-500 opacity-100'
+                : 'opacity-40 hover:opacity-75'
+            "
+            [style.border-color]="activeImageIndex === i ? '' : '#2d2926'"
+          >
+            <img
+              [src]="img.url"
+              [alt]="img.altText || product.name"
+              class="w-full h-full object-cover"
+            />
+          </button>
+        </div>
+      </div>
+
+      <!-- ── DETAILS SECTION ── -->
+      <div class="flex flex-col gap-6 pt-1">
+        <!-- Category eyebrow -->
+        <div class="flex items-center gap-3">
+          <div class="h-px w-4 bg-amber-500 shrink-0"></div>
+          <span class="text-xs tracking-[0.3em] uppercase text-amber-500">{{
+            categoryName || "Product"
+          }}</span>
+        </div>
+
+        <!-- Title -->
+        <h1
+          class="text-3xl md:text-4xl font-normal leading-snug tracking-tight"
+          style="color: #f0ece8"
+        >
+          {{ product.name }}
+        </h1>
+
+        <!-- Rating & Status -->
+        <div
+          class="flex flex-wrap items-center gap-4 pb-5"
+          style="border-bottom: 1px solid #2d2926"
+        >
+          <div class="flex items-center gap-2">
+            <span class="text-amber-400 text-sm">★</span>
+            <span class="text-sm" style="color: #8a8278">
+              {{ product.averageRating }}
+              <span class="mx-1" style="color: #3d3733">·</span>
+              {{ product.totalReviews }} reviews
+            </span>
+          </div>
+          <div class="w-px h-4" style="background-color: #2d2926"></div>
+          <div
+            class="flex items-center gap-2 text-[11px] font-bold tracking-[0.15em] uppercase"
+            [class.text-emerald-400]="product.isAvailable"
+            [class.text-red-400]="!product.isAvailable"
+          >
+            <span
+              class="w-1.5 h-1.5 rounded-full"
+              [class.bg-emerald-400]="product.isAvailable"
+              [class.bg-red-400]="!product.isAvailable"
+            ></span>
+            {{ product.isAvailable ? "In Stock" : "Out of Stock" }}
+          </div>
+          <span
+            class="text-[11px] font-semibold px-2 py-1 border tracking-wide"
+            [ngClass]="{
+              'border-red-500/30 text-red-400 bg-red-500/10':
+                product.stock <= 5,
+              'border-amber-500/30 text-amber-400 bg-amber-500/10':
+                product.stock > 5 && product.stock <= 10,
+              'text-stone-500': product.stock > 10
+            }"
+            [style.border-color]="product.stock > 10 ? '#2d2926' : ''"
+          >
+            {{ product.stock }} left
+          </span>
+        </div>
+
+        <!-- Price -->
+        <div class="flex items-baseline gap-4">
+          <p class="text-3xl font-light tracking-tight" style="color: #f0ece8">
+            ${{ product.discountedPrice || product.price }}
+          </p>
+          <p
+            *ngIf="
+              product.discountedPrice && product.discountedPrice < product.price
+            "
+            class="text-lg line-through"
+            style="color: #5a534d"
+          >
+            ${{ product.price }}
+          </p>
+          <span
+            *ngIf="
+              product.discountedPrice && product.discountedPrice < product.price
+            "
+            class="text-xs font-bold text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 tracking-[0.1em]"
+          >
+            SAVE ${{
+              product.price - product.discountedPrice | number : "1.0-0"
+            }}
+          </span>
+        </div>
+
+        <!-- Description -->
+        <p
+          class="text-sm leading-relaxed pl-4"
+          style="color: #8a8278; border-left: 2px solid #2d2926"
+        >
+          {{ product.description }}
+        </p>
+
+        <!-- Options -->
+        <div class="flex flex-col gap-5">
+          <!-- Colors -->
+          <div *ngIf="hasColors()">
+            <label
+              class="block text-xs tracking-[0.2em] uppercase mb-3"
+              style="color: #6b6560"
+            >
+              Color —
+              <span
+                class="normal-case tracking-normal"
+                style="color: #c4bcb4"
+                >{{ selectedColor }}</span
+              >
+            </label>
+            <div class="flex gap-2.5 flex-wrap">
+              <button
+                *ngFor="let color of product.specs.colors"
+                (click)="selectedColor = color"
+                class="w-8 h-8 border-2 transition-all duration-150 hover:scale-110 focus:outline-none"
+                [class.border-amber-500]="selectedColor === color"
+                [class.ring-1]="selectedColor === color"
+                [class.ring-amber-500]="selectedColor === color"
+                [class.ring-offset-2]="selectedColor === color"
+                [class.border-transparent]="selectedColor !== color"
+                [style.ring-offset-color]="'#1c1917'"
+                [style.background-color]="color.toLowerCase()"
+                [title]="color"
+              ></button>
+            </div>
+          </div>
+
+          <!-- Sizes -->
+          <div *ngIf="hasSizes()">
+            <label
+              class="block text-xs tracking-[0.2em] uppercase mb-3"
+              style="color: #6b6560"
+              >Size</label
+            >
+            <div class="flex gap-2 flex-wrap">
+              <button
+                *ngFor="let size of product.specs.sizes"
+                (click)="selectedSize = size"
+                class="px-5 py-2 border text-sm tracking-wide transition-all duration-150 focus:outline-none"
+                [class.bg-amber-500]="selectedSize === size"
+                [class.text-stone-950]="selectedSize === size"
+                [class.border-amber-500]="selectedSize === size"
+                [class.text-stone-400]="selectedSize !== size"
+                [style.background-color]="
+                  selectedSize !== size ? 'transparent' : ''
+                "
+                [style.border-color]="selectedSize !== size ? '#2d2926' : ''"
+              >
+                {{ size }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Quantity -->
+          <div>
+            <label
+              class="block text-xs tracking-[0.2em] uppercase mb-3"
+              style="color: #6b6560"
+              >Quantity</label
+            >
+            <div
+              class="inline-flex items-center border"
+              style="border-color: #2d2926; background-color: #252220"
+            >
+              <button
+                (click)="decreaseQuantity()"
+                [disabled]="quantity <= 1"
+                class="w-11 h-11 flex items-center justify-center text-lg disabled:opacity-25 disabled:cursor-not-allowed transition-colors focus:outline-none"
+                style="color: #8a8278"
+                (mouseenter)="
+                  $any($event.target).style.backgroundColor = '#2d2926';
+                  $any($event.target).style.color = '#e8e0d8'
+                "
+                (mouseleave)="
+                  $any($event.target).style.backgroundColor = 'transparent';
+                  $any($event.target).style.color = '#8a8278'
+                "
+              >
+                −
+              </button>
+              <input
+                type="number"
+                [(ngModel)]="quantity"
+                min="1"
+                [max]="product.stock"
+                class="w-14 h-11 text-center text-sm font-semibold bg-transparent focus:outline-none"
+                style="
+                  border-left: 1px solid #2d2926;
+                  border-right: 1px solid #2d2926;
+                  color: #e8e0d8;
+                "
+              />
+              <button
+                (click)="increaseQuantity()"
+                [disabled]="quantity >= product.stock"
+                class="w-11 h-11 flex items-center justify-center text-lg disabled:opacity-25 disabled:cursor-not-allowed transition-colors focus:outline-none"
+                style="color: #8a8278"
+                (mouseenter)="
+                  $any($event.target).style.backgroundColor = '#2d2926';
+                  $any($event.target).style.color = '#e8e0d8'
+                "
+                (mouseleave)="
+                  $any($event.target).style.backgroundColor = 'transparent';
+                  $any($event.target).style.color = '#8a8278'
+                "
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTAs -->
+        <div class="flex gap-3 pt-1">
+          <button
+            (click)="addToCart()"
+            [disabled]="
+              !product.isAvailable || product.stock === 0 || addingToCart
+            "
+            class="flex-1 flex items-center justify-center gap-2.5 text-stone-950 text-xs font-bold tracking-[0.2em] uppercase py-4 transition-all duration-200 focus:outline-none disabled:cursor-not-allowed"
+            [style.background-color]="
+              !product.isAvailable || product.stock === 0 || addingToCart
+                ? '#2d2926'
+                : '#f59e0b'
+            "
+            [style.color]="
+              !product.isAvailable || product.stock === 0 || addingToCart
+                ? '#5a534d'
+                : '#1c1917'
+            "
+          >
+            <span
+              *ngIf="addingToCart"
+              class="w-4 h-4 border-2 border-stone-600 border-t-stone-950 rounded-full animate-spin"
+            ></span>
+            <svg
+              *ngIf="!addingToCart"
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 01-8 0" />
+            </svg>
+            {{ addingToCart ? "Adding…" : "Add to Cart" }}
+          </button>
+          <button
+            class="flex items-center justify-center border px-4 transition-all duration-200 focus:outline-none"
+            style="border-color: #2d2926; color: #6b6560"
+            (mouseenter)="
+              $any($event.currentTarget).style.borderColor =
+                'rgba(239,68,68,0.4)';
+              $any($event.currentTarget).style.backgroundColor =
+                'rgba(239,68,68,0.08)';
+              $any($event.currentTarget).style.color = '#f87171'
+            "
+            (mouseleave)="
+              $any($event.currentTarget).style.borderColor = '#2d2926';
+              $any($event.currentTarget).style.backgroundColor = 'transparent';
+              $any($event.currentTarget).style.color = '#6b6560'
+            "
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Trust badges -->
+        <div
+          class="flex flex-wrap items-center gap-5 py-4 text-xs"
+          style="border-top: 1px solid #2d2926; color: #6b6560"
+        >
+          <div class="flex items-center gap-1.5">
+            <svg
+              class="w-3.5 h-3.5 shrink-0 text-amber-500/50"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.955 11.955 0 003 12c0 6.627 5.373 12 12 12s12-5.373 12-12a11.955 11.955 0 00-.598-3.75"
+              />
+            </svg>
+            Secure checkout
+          </div>
+          <div class="flex items-center gap-1.5">
+            <svg
+              class="w-3.5 h-3.5 shrink-0 text-amber-500/50"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
+              />
+            </svg>
+            Free returns
+          </div>
+          <div class="flex items-center gap-1.5">
+            <svg
+              class="w-3.5 h-3.5 shrink-0 text-amber-500/50"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
+              />
+            </svg>
+            Gift wrapping
+          </div>
+        </div>
+
+        <!-- Specifications -->
+        <div class="overflow-hidden" style="border: 1px solid #2d2926">
+          <div
+            class="px-5 py-3.5 flex items-center gap-3"
+            style="background-color: #252220"
+          >
+            <div class="h-px w-4 bg-amber-500 shrink-0"></div>
+            <h3
+              class="text-xs font-bold tracking-[0.2em] uppercase"
+              style="color: #6b6560"
+            >
+              Specifications
+            </h3>
+          </div>
+          <div>
+            <div
+              class="flex justify-between items-center px-5 py-3.5 transition-colors"
+              style="border-bottom: 1px solid #2d2926"
+              (mouseenter)="
+                $any($event.currentTarget).style.backgroundColor =
+                  'rgba(37,34,32,0.5)'
+              "
+              (mouseleave)="
+                $any($event.currentTarget).style.backgroundColor = 'transparent'
+              "
+            >
+              <span
+                class="text-xs tracking-[0.1em] uppercase"
+                style="color: #6b6560"
+                >Category</span
+              >
+              <span class="text-sm" style="color: #c4bcb4">{{
+                categoryName || "N/A"
+              }}</span>
+            </div>
+            <div
+              *ngFor="let field of categorySpec?.specField"
+              class="flex justify-between items-center px-5 py-3.5 transition-colors"
+              style="border-bottom: 1px solid #2d2926"
+              (mouseenter)="
+                $any($event.currentTarget).style.backgroundColor =
+                  'rgba(37,34,32,0.5)'
+              "
+              (mouseleave)="
+                $any($event.currentTarget).style.backgroundColor = 'transparent'
+              "
+            >
+              <span
+                class="text-xs tracking-[0.1em] uppercase"
+                style="color: #6b6560"
+                >{{ field.label }}</span
+              >
+              <span
+                class="text-sm text-right max-w-[55%]"
+                style="color: #c4bcb4"
+              >
+                <ng-container *ngIf="field.type === 'Array'">
+                  <span *ngIf="getSpecValue(field.key) as val; else naVal">{{
+                    isArray(val) ? val.join(", ") : val
+                  }}</span>
+                </ng-container>
+                <ng-container *ngIf="field.type === 'Boolean'">
+                  <span *ngIf="getSpecValue(field.key) !== null; else naVal">{{
+                    getSpecValue(field.key) ? "Yes" : "No"
+                  }}</span>
+                </ng-container>
+                <ng-container
+                  *ngIf="field.type === 'String' || field.type === 'Number'"
+                >
+                  <span *ngIf="getSpecValue(field.key) as val; else naVal">{{
+                    val
+                  }}</span>
+                </ng-container>
+                <ng-template #naVal
+                  ><span class="italic text-xs" style="color: #3d3733"
+                    >N/A</span
+                  ></ng-template
+                >
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REVIEWS ── -->
+    <div class="mt-20 pt-10" style="border-top: 1px solid #2d2926">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="h-px w-4 bg-amber-500 shrink-0"></div>
+        <span class="text-xs tracking-[0.3em] uppercase text-amber-500"
+          >What customers say</span
+        >
+      </div>
+      <div class="flex items-end justify-between mb-8">
+        <h3 class="text-3xl font-normal tracking-tight" style="color: #f0ece8">
+          Customer Reviews
+        </h3>
+        <div
+          class="flex items-center gap-2 shrink-0 ml-4"
+          style="color: #8a8278"
+        >
+          <span class="text-2xl text-amber-400">★</span>
+          <span class="text-lg font-light" style="color: #e8e0d8">{{
+            product.averageRating
+          }}</span>
+          <span class="text-sm" style="color: #3d3733"
+            >({{ product.totalReviews }})</span
+          >
+        </div>
+      </div>
+
+      <!-- Review grid -->
+      <div
+        *ngIf="reviews.length > 0; else noReviews"
+        class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-10"
+      >
+        <div
+          *ngFor="let review of reviews"
+          class="p-5 transition-colors duration-200"
+          style="background-color: #252220; border: 1px solid #2d2926"
+          (mouseenter)="
+            $any($event.currentTarget).style.backgroundColor = '#2a2724'
+          "
+          (mouseleave)="
+            $any($event.currentTarget).style.backgroundColor = '#252220'
+          "
+        >
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-9 h-9 flex items-center justify-center shrink-0"
+                style="
+                  background-color: rgba(245, 158, 11, 0.1);
+                  border: 1px solid rgba(245, 158, 11, 0.2);
+                "
+              >
+                <span class="text-amber-400 font-semibold text-sm">{{
+                  review.user.name.charAt(0).toUpperCase()
+                }}</span>
+              </div>
+              <div>
+                <p class="text-sm font-medium" style="color: #e8e0d8">
+                  {{ review.user.name }}
+                </p>
+                <div class="flex items-center gap-0.5 mt-0.5">
+                  <span
+                    *ngFor="let s of [1, 2, 3, 4, 5]"
+                    class="text-xs"
+                    [class.text-amber-400]="s <= review.rating"
+                    [style.color]="s > review.rating ? '#2d2926' : ''"
+                    >★</span
+                  >
+                </div>
+              </div>
+            </div>
+            <span class="text-xs shrink-0 ml-2" style="color: #3d3733">{{
+              review.createdAt | date : "mediumDate"
+            }}</span>
+          </div>
+          <p class="text-sm leading-relaxed" style="color: #8a8278">
+            {{ review.comment }}
+          </p>
+        </div>
+      </div>
+
+      <ng-template #noReviews>
+        <div
+          class="flex flex-col items-center justify-center py-14 mb-10 text-center"
+          style="border: 1px solid #2d2926"
+        >
+          <div
+            class="w-10 h-10 flex items-center justify-center mb-4"
+            style="border: 1px solid #2d2926; color: #3d3733"
+          >
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <p class="text-sm italic" style="color: #5a534d">
+            No reviews yet — be the first to share your thoughts.
+          </p>
+        </div>
+      </ng-template>
+
+      <!-- Write review -->
+      <div
+        *ngIf="isLoggedIn && !hasUserReviewed"
+        style="border: 1px solid #2d2926"
+      >
+        <div
+          class="px-6 py-4 flex items-center gap-3"
+          style="border-bottom: 1px solid #2d2926; background-color: #252220"
+        >
+          <div class="h-px w-4 bg-amber-500 shrink-0"></div>
+          <h3
+            class="text-xs font-bold tracking-[0.2em] uppercase"
+            style="color: #6b6560"
+          >
+            Write a Review
+          </h3>
+        </div>
+        <div class="px-6 py-7" style="background-color: #1c1917">
+          <form (ngSubmit)="submitReview()" class="flex flex-col gap-6">
+            <div>
+              <label
+                class="block text-xs tracking-[0.2em] uppercase mb-3"
+                style="color: #6b6560"
+                >Your Rating</label
+              >
+              <div class="flex gap-1">
+                <button
+                  *ngFor="let star of [1, 2, 3, 4, 5]"
+                  type="button"
+                  (click)="selectedRating = star"
+                  class="text-3xl transition-transform duration-100 hover:scale-110 focus:outline-none leading-none"
+                  [class.text-amber-400]="selectedRating >= star"
+                  [style.color]="selectedRating < star ? '#2d2926' : ''"
+                >
+                  ★
+                </button>
+              </div>
+            </div>
+            <div>
+              <label
+                class="block text-xs tracking-[0.2em] uppercase mb-3"
+                style="color: #6b6560"
+                >Your Review</label
+              >
+              <textarea
+                [(ngModel)]="reviewComment"
+                name="reviewComment"
+                rows="5"
+                placeholder="Share your experience with this product…"
+                class="w-full text-sm leading-relaxed resize-none transition-colors duration-200 outline-none px-5 py-4"
+                style="
+                  background-color: #252220;
+                  border: 1px solid #2d2926;
+                  color: #c4bcb4;
+                "
+                (focus)="
+                  $any($event.target).style.borderColor = 'rgba(245,158,11,0.5)'
+                "
+                (blur)="$any($event.target).style.borderColor = '#2d2926'"
+                required
+              ></textarea>
+            </div>
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                [disabled]="
+                  !selectedRating || !reviewComment || submittingReview
+                "
+                class="flex items-center gap-2.5 text-stone-950 text-xs font-bold tracking-[0.2em] uppercase px-8 py-3.5 transition-all duration-200 focus:outline-none disabled:cursor-not-allowed"
+                [style.background-color]="
+                  !selectedRating || !reviewComment || submittingReview
+                    ? '#2d2926'
+                    : '#f59e0b'
+                "
+                [style.color]="
+                  !selectedRating || !reviewComment || submittingReview
+                    ? '#5a534d'
+                    : '#1c1917'
+                "
+              >
+                <span
+                  *ngIf="submittingReview"
+                  class="w-4 h-4 border-2 border-stone-600 border-t-stone-900 rounded-full animate-spin"
+                ></span>
+                {{ submittingReview ? "Submitting…" : "Submit Review" }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Already reviewed -->
+      <div
+        *ngIf="isLoggedIn && hasUserReviewed"
+        class="px-6 py-5 flex items-center gap-3"
+        style="
+          border: 1px solid rgba(245, 158, 11, 0.2);
+          background-color: rgba(245, 158, 11, 0.05);
+        "
+      >
+        <span class="text-amber-400">✓</span>
+        <p class="text-sm" style="color: rgba(251, 191, 36, 0.75)">
+          You have already reviewed this product.
+        </p>
+      </div>
+
+      <!-- Not logged in -->
+      <div
+        *ngIf="!isLoggedIn"
+        class="px-6 py-8 text-center"
+        style="border: 1px solid #2d2926"
+      >
+        <p class="text-sm" style="color: #6b6560">
+          Please
+          <a
+            routerLink="/auth/login"
+            class="text-amber-400 hover:text-amber-300 transition-colors"
+            style="border-bottom: 1px solid rgba(251, 191, 36, 0.4)"
+            >log in</a
+          >
+          to write a review.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div
+  *ngIf="loading"
+  class="min-h-screen flex items-center justify-center"
+  style="background-color: #1c1917"
+>
+  <div
+    class="w-10 h-10 rounded-full animate-spin"
+    style="border: 1px solid #2d2926; border-top-color: #f59e0b"
+  ></div>
+</div>
+
+<!-- Error -->
+<div
+  *ngIf="error && !loading"
+  class="min-h-screen flex items-center justify-center"
+  style="background-color: #1c1917"
+>
+  <div class="text-center max-w-sm px-6">
+    <div
+      class="w-16 h-16 flex items-center justify-center mb-8 mx-auto"
+      style="border: 1px solid #2d2926; color: #3d3733"
+    >
+      <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+    <h2 class="text-2xl font-normal mb-3 tracking-tight" style="color: #c4bcb4">
+      Product Not Found
+    </h2>
+    <p class="text-sm mb-10 leading-relaxed" style="color: #5a534d">
+      The product you're looking for doesn't exist or may have been removed.
+    </p>
+    <a
+      routerLink="/products"
+      class="inline-flex items-center gap-2 text-stone-950 text-xs font-bold tracking-[0.2em] uppercase py-3.5 px-8 bg-amber-500 hover:bg-amber-400 transition-all duration-200"
+    >
+      Browse Products
+    </a>
+  </div>
+</div>
+
+<!--
+  ── ADD TO COMPONENT CLASS ───────────────────────────────────────────────────
+  activeImageIndex = 0;
+
+  prevImage() {
+    if (this.activeImageIndex > 0) this.activeImageIndex--;
+  }
+
+  nextImage() {
+    if (this.activeImageIndex < this.product.images.length - 1) this.activeImageIndex++;
+  }
+-->

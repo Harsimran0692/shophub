@@ -1,0 +1,411 @@
+<!-- cart.component.html -->
+<div class="min-h-screen bg-zinc-50">
+  <!-- Page Heading -->
+  <div class="bg-white border-b border-zinc-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-5">
+      <h1 class="text-xl font-bold tracking-tight text-zinc-900">
+        Shopping Cart
+      </h1>
+      <p class="text-xs text-zinc-400 mt-0.5">
+        Review your items before checkout
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-6">
+    <!-- ─── Loading State ─── -->
+    <div
+      *ngIf="loading"
+      class="flex flex-col items-center justify-center py-24 gap-4"
+    >
+      <svg
+        class="animate-spin w-7 h-7 text-zinc-400"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        />
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+      </svg>
+      <p class="text-sm text-zinc-400">Loading your cart...</p>
+    </div>
+
+    <!-- ─── Error State ─── -->
+    <div
+      *ngIf="errorMessage && !loading"
+      class="flex flex-col items-center justify-center py-20 gap-4 text-center"
+      role="alert"
+    >
+      <div
+        class="w-12 h-12 rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center"
+      >
+        <svg
+          class="w-6 h-6 text-red-400"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-zinc-800">Something went wrong</p>
+        <p class="text-xs text-zinc-400 mt-1">{{ errorMessage }}</p>
+      </div>
+      <button
+        (click)="retryLoadCart()"
+        class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-zinc-900 hover:bg-zinc-800 px-5 py-2.5 rounded-xl transition-all"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          />
+        </svg>
+        Try Again
+      </button>
+    </div>
+
+    <!-- ─── Cart Content ─── -->
+    <ng-container *ngIf="cart$ | async as cart">
+      <ng-container *ngIf="totalCartItems > 0; else emptyCart">
+        <!--
+          Stack on mobile/tablet: items on top, summary below.
+          Side-by-side only on lg+ screens.
+          Use flex-col so nothing overflows horizontally.
+        -->
+        <div class="flex flex-col lg:flex-row lg:items-start gap-6">
+          <!-- ── LEFT: Cart Items ── -->
+          <div class="w-full lg:flex-1 min-w-0 flex flex-col gap-3">
+            <!-- Item count row -->
+            <div class="flex items-center justify-between mb-1">
+              <span
+                class="text-xs font-semibold text-zinc-500 uppercase tracking-wide"
+              >
+                {{ cartItemCount$ | async }}
+                {{ (cartItemCount$ | async) === 1 ? "Item" : "Items" }}
+              </span>
+              <button
+                class="text-xs font-medium text-zinc-400 hover:text-red-500 transition-colors"
+              >
+                Clear all
+              </button>
+            </div>
+
+            <!-- Cart Item Card -->
+            <div
+              *ngFor="let item of cart.items"
+              class="bg-white rounded-2xl border border-zinc-200 shadow-sm p-4 sm:p-5 transition-all hover:shadow-md"
+            >
+              <div class="flex items-start gap-3 sm:gap-4">
+                <!-- Product Image -->
+                <div class="relative shrink-0">
+                  <img
+                    [src]="item.product.images[0]?.url"
+                    [alt]="item.product.images[0]?.altText"
+                    class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-xl border border-zinc-200 bg-zinc-100"
+                  />
+                  <div
+                    *ngIf="!item.product.isAvailable"
+                    class="absolute inset-0 bg-white/75 rounded-xl flex items-center justify-center"
+                  >
+                    <span class="text-xs font-bold text-red-500">Sold Out</span>
+                  </div>
+                </div>
+
+                <!-- Item Details -->
+                <div class="flex-1 min-w-0">
+                  <!-- Name + Remove -->
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                      <h3
+                        class="text-sm font-semibold text-zinc-900 leading-snug line-clamp-2"
+                      >
+                        {{ item.product.name }}
+                      </h3>
+                      <p class="text-xs text-zinc-400 mt-0.5">
+                        {{ item.product.category.name }}
+                      </p>
+                    </div>
+                    <button
+                      (click)="removeItem(item)"
+                      aria-label="Remove item"
+                      class="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-zinc-300 hover:text-red-500 hover:bg-red-50 transition-all"
+                    >
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <!-- Price + stock + qty — wrap on narrow screens -->
+                  <div
+                    class="flex flex-wrap items-center justify-between gap-y-3 gap-x-4 mt-3"
+                  >
+                    <!-- Price & Badge -->
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="text-base font-bold text-zinc-900">
+                        {{
+                          item.product.discountedPrice
+                            ? "$" + item.product.discountedPrice
+                            : "$" + item.product.price
+                        }}
+                      </span>
+                      <span
+                        *ngIf="item.product.discountedPrice"
+                        class="text-xs text-zinc-400 line-through"
+                      >
+                        ${{ item.product.price }}
+                      </span>
+                      <span
+                        *ngIf="item.product.isAvailable"
+                        class="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full"
+                        >In Stock</span
+                      >
+                      <span
+                        *ngIf="!item.product.isAvailable"
+                        class="text-xs font-semibold text-red-600 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full"
+                        >Out of Stock</span
+                      >
+                    </div>
+
+                    <!-- Quantity Controls -->
+                    <div
+                      class="flex items-center gap-1.5 bg-zinc-100 rounded-xl p-1"
+                    >
+                      <button
+                        (click)="updateQuantity(item, item.quantity - 1)"
+                        [disabled]="
+                          item.quantity <= 1 || !item.product.isAvailable
+                        "
+                        aria-label="Decrease quantity"
+                        class="w-7 h-7 rounded-lg flex items-center justify-center text-zinc-700 font-bold text-sm hover:bg-white hover:shadow-sm disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                      >
+                        −
+                      </button>
+                      <span
+                        class="w-7 text-center text-sm font-bold text-zinc-900 tabular-nums"
+                      >
+                        {{ item.quantity }}
+                      </span>
+                      <button
+                        (click)="updateQuantity(item, item.quantity + 1)"
+                        [disabled]="
+                          item.quantity >= item.product.stock ||
+                          !item.product.isAvailable
+                        "
+                        aria-label="Increase quantity"
+                        class="w-7 h-7 rounded-lg flex items-center justify-center text-zinc-700 font-bold text-sm hover:bg-white hover:shadow-sm disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Per-item subtotal -->
+                  <p class="text-xs text-zinc-400 mt-2">
+                    Subtotal:
+                    <span class="font-semibold text-zinc-600">
+                      ${{
+                        (item.product.discountedPrice || item.product.price) *
+                          item.quantity
+                      }}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Continue Shopping -->
+            <div class="mt-1">
+              <a
+                routerLink="/products"
+                class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-400 hover:text-zinc-700 transition-colors"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+                Continue Shopping
+              </a>
+            </div>
+          </div>
+
+          <!-- ── RIGHT: Order Summary ── -->
+          <!--
+            w-full on mobile so it uses all available width.
+            lg:w-80 fixes the width on large screens.
+            lg:sticky keeps it in view while scrolling on desktop.
+          -->
+          <div class="w-full lg:w-80 lg:shrink-0 lg:sticky lg:top-6">
+            <div
+              class="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden"
+            >
+              <div class="px-5 py-4 border-b border-zinc-100">
+                <h3 class="text-sm font-semibold text-zinc-900">
+                  Order Summary
+                </h3>
+              </div>
+
+              <div class="px-5 py-4 space-y-3">
+                <div class="flex justify-between">
+                  <span class="text-sm text-zinc-500"
+                    >Items ({{ cartItemCount$ | async }})</span
+                  >
+                  <span class="text-sm font-medium text-zinc-800"
+                    >${{ cart.totalPrice || 0 }}</span
+                  >
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-sm text-zinc-500">Shipping</span>
+                  <span class="text-sm font-semibold text-emerald-600"
+                    >Free</span
+                  >
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-sm text-zinc-500">Tax</span>
+                  <span class="text-sm font-medium text-zinc-800"
+                    >${{ getTax() }}</span
+                  >
+                </div>
+              </div>
+
+              <div class="mx-5 border-t border-zinc-200"></div>
+
+              <div class="px-5 py-4 flex items-center justify-between">
+                <span class="text-sm font-semibold text-zinc-900">Total</span>
+                <span class="text-xl font-bold text-zinc-900"
+                  >${{ getTotal() }}</span
+                >
+              </div>
+
+              <div class="mx-5 border-t border-zinc-100"></div>
+
+              <div class="px-5 py-5 space-y-3">
+                <button
+                  routerLink="/checkout"
+                  [disabled]="!cart.items?.length"
+                  class="w-full flex items-center justify-center gap-2 py-3 bg-zinc-900 hover:bg-zinc-800 active:bg-zinc-950 disabled:bg-zinc-300 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-all shadow-sm"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    viewBox="0 0 24 24"
+                  >
+                    <rect x="3" y="11" width="18" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0110 0v4" />
+                  </svg>
+                  Proceed to Checkout
+                </button>
+
+                <p
+                  class="flex items-center justify-center gap-1.5 text-xs text-zinc-400"
+                >
+                  <svg
+                    class="w-3 h-3 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                  256-bit SSL encrypted &amp; secure
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- ─── Empty Cart ─── -->
+    <ng-template #emptyCart>
+      <div
+        *ngIf="!loading"
+        class="flex flex-col items-center justify-center py-24 gap-5 text-center"
+      >
+        <div
+          class="w-20 h-20 rounded-3xl bg-zinc-100 flex items-center justify-center"
+        >
+          <svg
+            class="w-10 h-10 text-zinc-300"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.25"
+            viewBox="0 0 24 24"
+          >
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path
+              d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.72a2 2 0 001.99-1.61L23 6H6"
+            />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-zinc-900">Your cart is empty</h3>
+          <p class="text-sm text-zinc-400 mt-1.5 max-w-xs">
+            Looks like you haven't added anything yet. Start browsing to find
+            something you'll love.
+          </p>
+        </div>
+        <a
+          routerLink="/products"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-zinc-900 hover:bg-zinc-800 px-6 py-3 rounded-xl transition-all shadow-sm"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+            />
+          </svg>
+          Start Shopping
+        </a>
+      </div>
+    </ng-template>
+  </div>
+</div>

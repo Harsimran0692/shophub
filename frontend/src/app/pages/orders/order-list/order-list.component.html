@@ -1,0 +1,420 @@
+<div class="min-h-screen bg-neutral-50">
+  <!-- Page Header -->
+  <div class="sticky top-0 z-10 bg-white border-b border-neutral-200">
+    <div
+      class="max-w-3xl mx-auto px-6 py-4 flex items-end justify-between gap-4"
+    >
+      <div>
+        <p
+          class="text-xs font-semibold tracking-widest uppercase text-neutral-400 mb-0.5"
+        >
+          Account
+        </p>
+        <h1 class="text-xl font-semibold tracking-tight text-neutral-900">
+          My Orders
+        </h1>
+      </div>
+      <div class="relative flex items-center">
+        <svg
+          class="absolute left-2.5 w-3.5 h-3.5 text-neutral-400 pointer-events-none"
+          viewBox="0 0 20 20"
+          fill="none"
+        >
+          <path
+            d="M3 5h14M6 10h8M9 15h2"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+        </svg>
+        <select
+          [(ngModel)]="statusFilter"
+          (change)="onFilterChange()"
+          class="appearance-none bg-neutral-100 border border-neutral-200 text-neutral-800 text-sm font-medium rounded-lg pl-7 pr-8 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition cursor-pointer"
+        >
+          <option value="">All Orders</option>
+          <option value="pending">Pending</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <svg
+          class="absolute right-2.5 w-3.5 h-3.5 text-neutral-400 pointer-events-none"
+          viewBox="0 0 20 20"
+          fill="none"
+        >
+          <path
+            d="M5 8l5 5 5-5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 py-7 pb-16">
+    <!-- Loading Skeleton -->
+    <div *ngIf="loading" class="flex flex-col gap-4">
+      <div
+        *ngFor="let i of [1, 2, 3]"
+        class="bg-white border border-neutral-200 rounded-2xl overflow-hidden animate-pulse"
+      >
+        <div class="px-5 py-4 flex justify-between items-center">
+          <div class="flex flex-col gap-2">
+            <div class="h-3.5 bg-neutral-100 rounded w-28"></div>
+            <div class="h-3 bg-neutral-100 rounded w-20"></div>
+          </div>
+          <div class="flex flex-col items-end gap-2">
+            <div class="h-5 bg-neutral-100 rounded-full w-20"></div>
+            <div class="h-4 bg-neutral-100 rounded w-14"></div>
+          </div>
+        </div>
+        <div class="border-t border-neutral-100 px-5 py-4 flex flex-col gap-3">
+          <div *ngFor="let j of [1, 2]" class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-neutral-100 shrink-0"></div>
+            <div class="flex flex-col gap-1.5 flex-1">
+              <div class="h-3 bg-neutral-100 rounded w-full"></div>
+              <div class="h-3 bg-neutral-100 rounded w-24"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders List -->
+    <div *ngIf="!loading && orders.length > 0" class="flex flex-col gap-4">
+      <div
+        *ngFor="let order of orders"
+        class="bg-white border border-neutral-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-200"
+      >
+        <!-- Card Header -->
+        <div class="flex items-center justify-between px-5 py-4 gap-3">
+          <div class="flex flex-col gap-1">
+            <span
+              class="font-mono text-sm font-medium text-neutral-800 tracking-wide"
+            >
+              <span class="text-neutral-400">#</span
+              >{{ order._id.slice(-8).toUpperCase() }}
+            </span>
+            <div class="flex items-center gap-1.5 text-xs text-neutral-500">
+              <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 16 16" fill="none">
+                <rect
+                  x="2"
+                  y="3"
+                  width="12"
+                  height="11"
+                  rx="2"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                />
+                <path
+                  d="M5 1v3M11 1v3M2 7h12"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              {{ order.createdAt | date : "MMM d, yyyy · h:mm a" }}
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-1.5">
+            <span
+              class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold"
+              [ngClass]="getStatusClass(order.status)"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
+              {{ order.status | titlecase }}
+            </span>
+            <span
+              class="text-base font-semibold text-neutral-900 tracking-tight"
+            >
+              ${{ order.totalAmount | number : "1.2-2" }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="h-px bg-neutral-100"></div>
+
+        <!-- Items Section -->
+        <div class="px-5 py-4">
+          <p
+            class="text-xs font-semibold uppercase tracking-widest text-neutral-400 mb-3"
+          >
+            Items ({{ order.items.length }})
+          </p>
+          <div class="flex flex-col gap-2">
+            <div
+              *ngFor="let item of order.items.slice(0, 3)"
+              class="flex items-center gap-3"
+            >
+              <!-- Placeholder icon since product is an ID string, no image available on OrderItem -->
+              <div
+                class="w-10 h-10 rounded-xl border border-neutral-200 overflow-hidden shrink-0 bg-neutral-50"
+              >
+                <img
+                  *ngIf="getProductImage(item.product)"
+                  [src]="getProductImage(item.product)"
+                  [alt]="item.name"
+                  class="w-full h-full object-cover"
+                />
+                <div
+                  *ngIf="!getProductImage(item.product)"
+                  class="w-full h-full flex items-center justify-center text-neutral-400"
+                >
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-neutral-900 truncate">
+                  {{ item.name || "Product" }}
+                </p>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <span class="text-xs text-neutral-500"
+                    >Qty {{ item.quantity }}</span
+                  >
+                  <span class="text-neutral-300">·</span>
+                  <span class="text-xs font-semibold text-neutral-700"
+                    >${{ item.price | number : "1.2-2" }}</span
+                  >
+                </div>
+              </div>
+              <span class="text-xs font-semibold text-neutral-600 shrink-0">
+                ${{ item.price * item.quantity | number : "1.2-2" }}
+              </span>
+            </div>
+
+            <div
+              *ngIf="order.items.length > 3"
+              class="text-xs text-neutral-400 font-medium pt-1 pl-13"
+            >
+              +{{ order.items.length - 3 }} more item{{
+                order.items.length - 3 === 1 ? "" : "s"
+              }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="h-px bg-neutral-100"></div>
+
+        <!-- Card Footer -->
+        <div
+          class="flex items-start justify-between gap-4 px-5 py-3 bg-neutral-50 flex-wrap"
+        >
+          <!-- Left: Shipping + Payment -->
+          <div class="flex flex-col gap-1.5 min-w-0">
+            <!-- Shipping address -->
+            <div
+              *ngIf="order.address"
+              class="flex items-start gap-1.5 text-xs text-neutral-500"
+            >
+              <svg
+                class="w-3.5 h-3.5 shrink-0 mt-0.5 text-neutral-400"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <path
+                  d="M8 1.5C5.515 1.5 3.5 3.515 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.485-2.015-4.5-4.5-4.5z"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                />
+                <circle
+                  cx="8"
+                  cy="6"
+                  r="1.5"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                />
+              </svg>
+              <span class="truncate max-w-xs">
+                {{ order.address.name }}
+                <ng-container *ngIf="order.address.streetAddress">
+                  · {{ order.address.streetAddress }},
+                  {{ order.address.postalCode }}, {{ order.address.region }},
+                  {{ order.address.country }}
+                </ng-container>
+              </span>
+            </div>
+            <!-- Payment -->
+            <div
+              *ngIf="order.paymentDetails"
+              class="flex items-center gap-1.5 text-xs text-neutral-500"
+            >
+              <svg
+                class="w-3.5 h-3.5 shrink-0 text-neutral-400"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <rect
+                  x="1.5"
+                  y="3.5"
+                  width="13"
+                  height="9"
+                  rx="1.5"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                />
+                <path
+                  d="M1.5 6.5h13"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                />
+                <rect
+                  x="3.5"
+                  y="9"
+                  width="3"
+                  height="1.5"
+                  rx=".5"
+                  fill="currentColor"
+                />
+              </svg>
+              <span
+                >·· {{ order.paymentDetails.cardNumberLast4 }} ·
+                {{ order.paymentDetails.cardholderName }}</span
+              >
+            </div>
+          </div>
+
+          <!-- Right: Actions -->
+          <div class="flex items-center gap-2 shrink-0">
+            <button
+              *ngIf="order.status === 'pending'"
+              (click)="cancelOrder(order._id)"
+              class="text-xs font-medium text-red-600 border border-transparent hover:border-red-200 hover:bg-red-50 px-3 py-1.5 rounded-lg transition cursor-pointer"
+            >
+              Cancel Order
+            </button>
+
+            <ng-container *ngIf="order.status === 'delivered'">
+              <button
+                class="text-xs font-medium text-neutral-700 border border-neutral-300 hover:bg-neutral-100 px-3 py-1.5 rounded-lg transition cursor-pointer"
+              >
+                Write Review
+              </button>
+              <button
+                class="text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition cursor-pointer shadow-sm"
+              >
+                Reorder
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      *ngIf="!loading && orders.length === 0"
+      class="flex flex-col items-center justify-center py-24 text-center"
+    >
+      <div
+        class="w-20 h-20 rounded-2xl bg-neutral-100 border border-neutral-200 flex items-center justify-center mb-6 text-neutral-400"
+      >
+        <svg class="w-9 h-9" viewBox="0 0 64 64" fill="none">
+          <rect
+            x="8"
+            y="20"
+            width="48"
+            height="36"
+            rx="4"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M22 20V16a10 10 0 0120 0v4"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <path
+            d="M24 36h16M30 42h4"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-neutral-900 mb-2">No orders yet</h3>
+      <p class="text-sm text-neutral-500 mb-8">
+        When you place an order, it will show up here.
+      </p>
+      <a
+        routerLink="/products"
+        class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition shadow-sm"
+      >
+        Browse Products
+      </a>
+    </div>
+
+    <!-- Pagination -->
+    <div
+      *ngIf="totalPages > 1"
+      class="flex items-center justify-center gap-1.5 mt-8"
+    >
+      <button
+        (click)="changePage(currentPage - 1)"
+        [disabled]="currentPage === 1"
+        class="w-9 h-9 flex items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50 hover:border-neutral-300 disabled:opacity-30 disabled:cursor-not-allowed transition"
+      >
+        <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
+          <path
+            d="M10 12L6 8l4-4"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+
+      <button
+        *ngFor="let page of getPageNumbers()"
+        (click)="changePage(page)"
+        class="w-9 h-9 flex items-center justify-center rounded-lg border text-sm font-medium transition"
+        [ngClass]="
+          page === currentPage
+            ? 'bg-blue-600 border-blue-600 text-white shadow-sm'
+            : 'bg-white border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300'
+        "
+      >
+        {{ page }}
+      </button>
+
+      <button
+        (click)="changePage(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+        class="w-9 h-9 flex items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-50 hover:border-neutral-300 disabled:opacity-30 disabled:cursor-not-allowed transition"
+      >
+        <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
+          <path
+            d="M6 12l4-4-4-4"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!--
+  ─── getStatusClass(status: Order['status']): string ───────────────────────────
+  'pending'   → 'bg-yellow-100 text-yellow-800'
+  'shipped'   → 'bg-blue-100 text-blue-700'
+  'delivered' → 'bg-green-100 text-green-700'
+  'cancelled' → 'bg-red-100 text-red-700'
+-->

@@ -1,0 +1,643 @@
+<div class="min-h-screen bg-zinc-950 text-zinc-100 font-mono py-10 px-4">
+  <!-- Header -->
+  <div class="max-w-4xl mx-auto mb-8">
+    <div class="flex items-center gap-3 mb-1">
+      <span class="text-2xl">📦</span>
+      <h1 class="text-3xl font-bold tracking-tight text-white">New Product</h1>
+    </div>
+    <p class="text-zinc-500 text-sm ml-11">
+      Fill in the fields below to register a new product.
+    </p>
+  </div>
+
+  <!-- Section Nav -->
+  <div class="max-w-4xl mx-auto mb-6 flex gap-2 flex-wrap">
+    <button
+      *ngFor="let s of sections"
+      type="button"
+      (click)="activeSection = s.id"
+      [class.bg-amber-400]="activeSection === s.id"
+      [class.text-zinc-950]="activeSection === s.id"
+      [class.border-amber-400]="activeSection === s.id"
+      [class.text-zinc-400]="activeSection !== s.id"
+      [class.border-zinc-700]="activeSection !== s.id"
+      class="border px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-150 tracking-widest uppercase hover:border-amber-400 hover:text-amber-400"
+    >
+      {{ s.icon }} {{ s.label }}
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="max-w-4xl mx-auto space-y-6">
+      <!-- ══════════ BASIC INFO ══════════ -->
+      <section
+        *ngIf="activeSection === 'basic'"
+        class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-5"
+      >
+        <h2
+          class="text-xs uppercase tracking-[0.2em] text-amber-400 font-bold mb-4"
+        >
+          Basic Information
+        </h2>
+
+        <!-- Name -->
+        <div>
+          <label
+            class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+            >Product Name *</label
+          >
+          <input
+            formControlName="name"
+            type="text"
+            placeholder="e.g. Leather Laptop Bag"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+            [class.border-red-500]="isInvalid('name')"
+          />
+          <p *ngIf="isInvalid('name')" class="text-red-400 text-xs mt-1">
+            {{ getError("name") }}
+          </p>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label
+            class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+            >Description *</label
+          >
+          <textarea
+            formControlName="description"
+            rows="4"
+            placeholder="Describe the product in detail..."
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors resize-none"
+            [class.border-red-500]="isInvalid('description')"
+          ></textarea>
+          <div class="flex justify-between">
+            <p
+              *ngIf="isInvalid('description')"
+              class="text-red-400 text-xs mt-1"
+            >
+              {{ getError("description") }}
+            </p>
+            <p class="text-zinc-600 text-xs mt-1 ml-auto">
+              {{ form.get("description")?.value?.length || 0 }}/2000
+            </p>
+          </div>
+        </div>
+
+        <!-- Category -->
+        <div>
+          <label
+            class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+            >Category *</label
+          >
+          <select
+            formControlName="category"
+            (change)="onCategoryChange($event)"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400 transition-colors"
+          >
+            <option [ngValue]="null">Select Category</option>
+            <option *ngFor="let category of categories" [value]="category._id">
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Price row -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+              >Price ($) *</label
+            >
+            <input
+              formControlName="price"
+              type="number"
+              min="0"
+              placeholder="0.00"
+              class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+              [class.border-red-500]="isInvalid('price')"
+            />
+            <p *ngIf="isInvalid('price')" class="text-red-400 text-xs mt-1">
+              {{ getError("price") }}
+            </p>
+          </div>
+          <div>
+            <label
+              class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+              >Discounted Price ($)</label
+            >
+            <input
+              formControlName="discountedPrice"
+              type="number"
+              min="0"
+              placeholder="Optional"
+              class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+              [class.border-red-500]="isInvalid('discountedPrice')"
+            />
+            <p
+              *ngIf="form.errors?.['discountExceedsPrice'] && submitted"
+              class="text-red-400 text-xs mt-1"
+            >
+              Discount must be ≤ regular price.
+            </p>
+          </div>
+        </div>
+
+        <!-- Toggles -->
+        <div class="grid grid-cols-3 gap-3 pt-2">
+          <label
+            *ngFor="
+              let flag of [
+                { key: 'isFeatured', label: 'Featured' },
+                { key: 'isDeal', label: 'Deal' },
+                { key: 'isAvailable', label: 'Available' }
+              ]
+            "
+            class="flex items-center gap-3 bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 cursor-pointer hover:border-amber-400 transition-colors"
+          >
+            <input
+              type="checkbox"
+              [formControlName]="flag.key"
+              class="accent-amber-400 w-4 h-4 cursor-pointer"
+            />
+            <span class="text-sm text-zinc-300">{{ flag.label }}</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- ══════════ SPECS ══════════ -->
+      <section
+        *ngIf="activeSection === 'specs'"
+        formGroupName="specs"
+        class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-5"
+      >
+        <h2
+          class="text-xs uppercase tracking-[0.2em] text-amber-400 font-bold mb-4"
+        >
+          Specifications
+        </h2>
+
+        <div *ngFor="let field of filteredSpec.specField">
+          <label
+            class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+          >
+            {{ field.label }}
+          </label>
+
+          <input
+            [type]="field.type || 'text'"
+            [formControlName]="field.key"
+            [attr.min]="field.min"
+            [attr.max]="field.max"
+            placeholder="Enter {{ field.label }}"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white"
+          />
+
+          <p
+            *ngIf="
+              form.get('specs.' + field.key)?.invalid &&
+              (submitted || form.get('specs.' + field.key)?.touched)
+            "
+            class="text-red-400 text-xs mt-1"
+          >
+            This field is invalid
+          </p>
+        </div>
+
+        <!-- Material -->
+        <!-- <div>
+          <label
+            class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+            >Material</label
+          >
+          <input
+            formControlName="material"
+            type="text"
+            placeholder="e.g. Full-grain leather"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+          />
+        </div> -->
+
+        <!-- Dimensions -->
+        <!-- <div formGroupName="dimensions">
+          <label
+            class="block text-xs text-zinc-400 mb-2 uppercase tracking-widest"
+            >Dimensions</label
+          >
+          <div class="grid grid-cols-4 gap-3">
+            <div>
+              <input
+                formControlName="length"
+                type="number"
+                min="0"
+                placeholder="Length"
+                class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+              />
+            </div>
+            <div>
+              <input
+                formControlName="width"
+                type="number"
+                min="0"
+                placeholder="Width"
+                class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+              />
+            </div>
+            <div>
+              <input
+                formControlName="height"
+                type="number"
+                min="0"
+                placeholder="Height"
+                class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+              />
+            </div>
+            <div>
+              <select
+                formControlName="unit"
+                class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400 transition-colors"
+              >
+                <option [ngValue]="null">Unit</option>
+                <option *ngFor="let u of dimensionUnits" [value]="u">
+                  {{ u }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div> -->
+
+        <!-- Weight -->
+        <!-- <div formGroupName="weight">
+          <label
+            class="block text-xs text-zinc-400 mb-2 uppercase tracking-widest"
+            >Weight</label
+          >
+          <div class="grid grid-cols-2 gap-3">
+            <input
+              formControlName="value"
+              type="number"
+              min="0"
+              placeholder="Value"
+              class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+            />
+            <select
+              formControlName="unit"
+              class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400 transition-colors"
+            >
+              <option [ngValue]="null">Unit</option>
+              <option *ngFor="let u of weightUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div> -->
+
+        <!-- Colors -->
+        <!-- <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-xs text-zinc-400 uppercase tracking-widest"
+              >Colors</label
+            >
+            <button
+              type="button"
+              (click)="addColor()"
+              class="text-xs text-amber-400 hover:text-amber-300 border border-amber-400/40 hover:border-amber-400 px-3 py-1 rounded-full transition-colors"
+            >
+              + Add Color
+            </button>
+          </div>
+          <div class="space-y-2" formArrayName="colors">
+            <div
+              *ngFor="let c of colors.controls; let i = index"
+              class="flex gap-2"
+            >
+              <input
+                [formControlName]="i"
+                type="text"
+                placeholder="e.g. Midnight Black"
+                class="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+              />
+              <button
+                type="button"
+                (click)="removeColor(i)"
+                class="px-3 text-zinc-500 hover:text-red-400 border border-zinc-700 hover:border-red-500 rounded-lg transition-colors text-sm"
+              >
+                ✕
+              </button>
+            </div>
+            <p *ngIf="colors.length === 0" class="text-zinc-600 text-xs italic">
+              No colors added yet.
+            </p>
+          </div>
+        </div> -->
+
+        <!-- Sizes -->
+        <!-- <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-xs text-zinc-400 uppercase tracking-widest"
+              >Sizes</label
+            >
+            <button
+              type="button"
+              (click)="addSize()"
+              class="text-xs text-amber-400 hover:text-amber-300 border border-amber-400/40 hover:border-amber-400 px-3 py-1 rounded-full transition-colors"
+            >
+              + Add Size
+            </button>
+          </div>
+          <div class="space-y-2" formArrayName="sizes">
+            <div
+              *ngFor="let s of sizes.controls; let i = index"
+              class="flex gap-2"
+            >
+              <input
+                [formControlName]="i"
+                type="text"
+                placeholder="e.g. XL, 42, One Size"
+                class="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+              />
+              <button
+                type="button"
+                (click)="removeSize(i)"
+                class="px-3 text-zinc-500 hover:text-red-400 border border-zinc-700 hover:border-red-500 rounded-lg transition-colors text-sm"
+              >
+                ✕
+              </button>
+            </div>
+            <p *ngIf="sizes.length === 0" class="text-zinc-600 text-xs italic">
+              No sizes added yet.
+            </p>
+          </div>
+        </div> -->
+      </section>
+
+      <!-- ══════════ INVENTORY ══════════ -->
+      <section
+        *ngIf="activeSection === 'inventory'"
+        class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-5"
+      >
+        <h2
+          class="text-xs uppercase tracking-[0.2em] text-amber-400 font-bold mb-4"
+        >
+          Inventory
+        </h2>
+        <div>
+          <label
+            class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+            >Stock Quantity *</label
+          >
+          <input
+            formControlName="stock"
+            type="number"
+            min="0"
+            placeholder="0"
+            class="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+            [class.border-red-500]="isInvalid('stock')"
+          />
+          <p *ngIf="isInvalid('stock')" class="text-red-400 text-xs mt-1">
+            {{ getError("stock") }}
+          </p>
+        </div>
+
+        <!-- Stock status hint -->
+        <div class="bg-zinc-800 rounded-lg p-4 border border-zinc-700">
+          <p class="text-xs text-zinc-400 mb-1 uppercase tracking-widest">
+            Stock Status
+          </p>
+          <p
+            class="text-sm font-semibold"
+            [class.text-green-400]="(form.get('stock')?.value || 0) > 10"
+            [class.text-amber-400]="
+              (form.get('stock')?.value || 0) > 0 &&
+              (form.get('stock')?.value || 0) <= 10
+            "
+            [class.text-red-400]="(form.get('stock')?.value || 0) === 0"
+          >
+            <ng-container *ngIf="(form.get('stock')?.value || 0) > 10"
+              >● In Stock</ng-container
+            >
+            <ng-container
+              *ngIf="
+                (form.get('stock')?.value || 0) > 0 &&
+                (form.get('stock')?.value || 0) <= 10
+              "
+              >● Low Stock</ng-container
+            >
+            <ng-container *ngIf="(form.get('stock')?.value || 0) === 0"
+              >● Out of Stock</ng-container
+            >
+          </p>
+        </div>
+      </section>
+
+      <!-- ══════════ MEDIA ══════════ -->
+      <section
+        *ngIf="activeSection === 'media'"
+        class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-5"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h2
+            class="text-xs uppercase tracking-[0.2em] text-amber-400 font-bold"
+          >
+            Product Images
+          </h2>
+          <button
+            type="button"
+            (click)="addImage()"
+            class="text-xs text-amber-400 hover:text-amber-300 border border-amber-400/40 hover:border-amber-400 px-4 py-1.5 rounded-full transition-colors font-semibold tracking-widest uppercase"
+          >
+            + Add Image
+          </button>
+        </div>
+
+        <div formArrayName="images" class="space-y-4">
+          <div
+            *ngFor="let img of images.controls; let i = index"
+            [formGroupName]="i"
+            class="bg-zinc-800 border border-zinc-700 rounded-xl p-4 space-y-3"
+          >
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs text-zinc-500 uppercase tracking-widest"
+                >Image {{ i + 1 }}</span
+              >
+              <button
+                type="button"
+                (click)="removeImage(i)"
+                class="text-zinc-500 hover:text-red-400 text-xs border border-zinc-700 hover:border-red-500 px-2 py-0.5 rounded transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+            <div>
+              <label
+                class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+                >URL *</label
+              >
+              <input
+                formControlName="url"
+                type="url"
+                placeholder="https://..."
+                class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+                [class.border-red-500]="
+                  img.get('url')?.invalid &&
+                  (img.get('url')?.touched || submitted)
+                "
+              />
+              <p
+                *ngIf="
+                  img.get('url')?.invalid &&
+                  (img.get('url')?.touched || submitted)
+                "
+                class="text-red-400 text-xs mt-1"
+              >
+                URL is required.
+              </p>
+            </div>
+            <div>
+              <label
+                class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+                >Alt Text</label
+              >
+              <input
+                formControlName="altText"
+                type="text"
+                placeholder="Product Image"
+                class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+              />
+            </div>
+          </div>
+          <p
+            *ngIf="images.length === 0"
+            class="text-zinc-600 text-sm italic text-center py-6"
+          >
+            No images added yet. Click "+ Add Image" to start.
+          </p>
+        </div>
+      </section>
+
+      <!-- ══════════ REVIEWS ══════════ -->
+      <section
+        *ngIf="activeSection === 'reviews'"
+        class="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-5"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h2
+            class="text-xs uppercase tracking-[0.2em] text-amber-400 font-bold"
+          >
+            Seed Reviews
+          </h2>
+          <button
+            type="button"
+            (click)="addReview()"
+            class="text-xs text-amber-400 hover:text-amber-300 border border-amber-400/40 hover:border-amber-400 px-4 py-1.5 rounded-full transition-colors font-semibold tracking-widest uppercase"
+          >
+            + Add Review
+          </button>
+        </div>
+
+        <div formArrayName="reviews" class="space-y-4">
+          <div
+            *ngFor="let r of reviews.controls; let i = index"
+            [formGroupName]="i"
+            class="bg-zinc-800 border border-zinc-700 rounded-xl p-4 space-y-3"
+          >
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs text-zinc-500 uppercase tracking-widest"
+                >Review {{ i + 1 }}</span
+              >
+              <button
+                type="button"
+                (click)="removeReview(i)"
+                class="text-zinc-500 hover:text-red-400 text-xs border border-zinc-700 hover:border-red-500 px-2 py-0.5 rounded transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label
+                  class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+                  >User ID *</label
+                >
+                <input
+                  formControlName="user"
+                  type="text"
+                  placeholder="MongoDB ObjectId"
+                  class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+                  [class.border-red-500]="
+                    r.get('user')?.invalid &&
+                    (r.get('user')?.touched || submitted)
+                  "
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+                  >Rating (0–5) *</label
+                >
+                <input
+                  formControlName="rating"
+                  type="number"
+                  min="0"
+                  max="5"
+                  step="0.1"
+                  placeholder="4.5"
+                  class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors"
+                  [class.border-red-500]="
+                    r.get('rating')?.invalid &&
+                    (r.get('rating')?.touched || submitted)
+                  "
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                class="block text-xs text-zinc-400 mb-1.5 uppercase tracking-widest"
+                >Comment</label
+              >
+              <textarea
+                formControlName="comment"
+                rows="2"
+                placeholder="Optional review comment..."
+                class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-amber-400 transition-colors resize-none"
+              ></textarea>
+            </div>
+          </div>
+          <p
+            *ngIf="reviews.length === 0"
+            class="text-zinc-600 text-sm italic text-center py-6"
+          >
+            No reviews added. This is optional.
+          </p>
+        </div>
+      </section>
+
+      <!-- ══════════ ACTIONS ══════════ -->
+      <div class="flex items-center justify-between pt-2 pb-8">
+        <button
+          type="button"
+          (click)="onReset()"
+          class="text-sm text-zinc-500 hover:text-white border border-zinc-700 hover:border-zinc-500 px-6 py-2.5 rounded-lg transition-colors tracking-widest uppercase font-semibold"
+        >
+          Reset
+        </button>
+
+        <div class="flex gap-3">
+          <!-- Validation summary pill -->
+          <span
+            *ngIf="submitted && form.invalid"
+            class="flex items-center gap-2 text-xs text-red-400 border border-red-500/40 bg-red-500/10 px-4 py-2.5 rounded-lg"
+          >
+            ⚠ Fix errors before submitting
+          </span>
+          <button
+            type="submit"
+            class="text-sm font-bold bg-amber-400 hover:bg-amber-300 text-zinc-950 px-8 py-2.5 rounded-lg transition-colors tracking-widest uppercase"
+          >
+            Save Product
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,415 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+>
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Create your account
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Or
+        <a
+          routerLink="/auth/login"
+          class="font-medium text-primary-600 hover:text-primary-500"
+        >
+          sign in to your existing account
+        </a>
+      </p>
+    </div>
+
+    <form
+      class="mt-8 space-y-6"
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="space-y-4">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700">
+            Full Name
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            formControlName="name"
+            autocomplete="name"
+            class="input-field mt-1"
+            [class.border-red-500]="
+              registerForm.get('name')?.invalid &&
+              registerForm.get('name')?.touched
+            "
+            placeholder="Enter your full name"
+          />
+          <div
+            *ngIf="
+              registerForm.get('name')?.invalid &&
+              registerForm.get('name')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            <div *ngIf="registerForm.get('name')?.errors?.['required']">
+              Name is required
+            </div>
+            <div *ngIf="registerForm.get('name')?.errors?.['minlength']">
+              Name must be at least 2 characters
+            </div>
+            <div *ngIf="registerForm.get('name')?.errors?.['maxlength']">
+              Name cannot exceed 50 characters
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">
+            Email address
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            class="input-field mt-1"
+            [class.border-red-500]="
+              registerForm.get('email')?.invalid &&
+              registerForm.get('email')?.touched
+            "
+            placeholder="Enter your email"
+          />
+          <div
+            *ngIf="
+              registerForm.get('email')?.invalid &&
+              registerForm.get('email')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            <div *ngIf="registerForm.get('email')?.errors?.['required']">
+              Email is required
+            </div>
+            <div *ngIf="registerForm.get('email')?.errors?.['email']">
+              Please enter a valid email
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            formControlName="password"
+            autocomplete="new-password"
+            class="input-field mt-1"
+            [class.border-red-500]="
+              registerForm.get('password')?.invalid &&
+              registerForm.get('password')?.touched
+            "
+            placeholder="Create a password"
+          />
+          <div
+            *ngIf="
+              registerForm.get('password')?.invalid &&
+              registerForm.get('password')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            <div *ngIf="registerForm.get('password')?.errors?.['required']">
+              Password is required
+            </div>
+            <div *ngIf="registerForm.get('password')?.errors?.['minlength']">
+              Password must be at least 8 characters
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label
+            for="confirmPassword"
+            class="block text-sm font-medium text-gray-700"
+          >
+            Confirm Password
+          </label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            formControlName="confirmPassword"
+            autocomplete="new-password"
+            class="input-field mt-1"
+            [class.border-red-500]="
+              registerForm.get('confirmPassword')?.invalid &&
+              registerForm.get('confirmPassword')?.touched
+            "
+            placeholder="Confirm your password"
+          />
+          <div
+            *ngIf="
+              registerForm.get('confirmPassword')?.invalid &&
+              registerForm.get('confirmPassword')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            <div
+              *ngIf="registerForm.get('confirmPassword')?.errors?.['required']"
+            >
+              Please confirm your password
+            </div>
+            <div
+              *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']"
+            >
+              Passwords do not match
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="phone" class="block text-sm font-medium text-gray-700">
+            Phone Number (Optional)
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            formControlName="phone"
+            autocomplete="tel"
+            class="input-field mt-1"
+            [class.border-red-500]="
+              registerForm.get('phone')?.invalid &&
+              registerForm.get('phone')?.touched
+            "
+            placeholder="Enter your phone number"
+          />
+          <div
+            *ngIf="
+              registerForm.get('phone')?.invalid &&
+              registerForm.get('phone')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            <div *ngIf="registerForm.get('phone')?.errors?.['pattern']">
+              Please enter a valid phone number
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="street" class="block text-sm font-medium text-gray-700">
+            Street Address (Optional)
+          </label>
+          <input
+            id="street"
+            name="street"
+            type="text"
+            formControlName="street"
+            autocomplete="street-address"
+            class="input-field mt-1"
+            [class.border-red-500]="
+              registerForm.get('street')?.invalid &&
+              registerForm.get('street')?.touched
+            "
+            placeholder="Enter your street address"
+          />
+          <div
+            *ngIf="
+              registerForm.get('street')?.invalid &&
+              registerForm.get('street')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            <div *ngIf="registerForm.get('street')?.errors?.['maxlength']">
+              Street cannot exceed 100 characters
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="city" class="block text-sm font-medium text-gray-700">
+              City (Optional)
+            </label>
+            <input
+              id="city"
+              name="city"
+              type="text"
+              formControlName="city"
+              autocomplete="address-level2"
+              class="input-field mt-1"
+              [class.border-red-500]="
+                registerForm.get('city')?.invalid &&
+                registerForm.get('city')?.touched
+              "
+              placeholder="Enter your city"
+            />
+            <div
+              *ngIf="
+                registerForm.get('city')?.invalid &&
+                registerForm.get('city')?.touched
+              "
+              class="mt-1 text-sm text-red-600"
+            >
+              <div *ngIf="registerForm.get('city')?.errors?.['maxlength']">
+                City cannot exceed 50 characters
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="state" class="block text-sm font-medium text-gray-700">
+              State (Optional)
+            </label>
+            <input
+              id="state"
+              name="state"
+              type="text"
+              formControlName="state"
+              autocomplete="address-level1"
+              class="input-field mt-1"
+              [class.border-red-500]="
+                registerForm.get('state')?.invalid &&
+                registerForm.get('state')?.touched
+              "
+              placeholder="Enter your state"
+            />
+            <div
+              *ngIf="
+                registerForm.get('state')?.invalid &&
+                registerForm.get('state')?.touched
+              "
+              class="mt-1 text-sm text-red-600"
+            >
+              <div *ngIf="registerForm.get('state')?.errors?.['maxlength']">
+                State cannot exceed 50 characters
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              for="country"
+              class="block text-sm font-medium text-gray-700"
+            >
+              Country (Optional)
+            </label>
+            <input
+              id="country"
+              name="country"
+              type="text"
+              formControlName="country"
+              autocomplete="country-name"
+              class="input-field mt-1"
+              [class.border-red-500]="
+                registerForm.get('country')?.invalid &&
+                registerForm.get('country')?.touched
+              "
+              placeholder="Enter your country"
+            />
+            <div
+              *ngIf="
+                registerForm.get('country')?.invalid &&
+                registerForm.get('country')?.touched
+              "
+              class="mt-1 text-sm text-red-600"
+            >
+              <div *ngIf="registerForm.get('country')?.errors?.['maxlength']">
+                Country cannot exceed 50 characters
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="postalCode"
+              class="block text-sm font-medium text-gray-700"
+            >
+              Postal Code (Optional)
+            </label>
+            <input
+              id="postalCode"
+              name="postalCode"
+              type="text"
+              formControlName="postalCode"
+              autocomplete="postal-code"
+              class="input-field mt-1"
+              [class.border-red-500]="
+                registerForm.get('postalCode')?.invalid &&
+                registerForm.get('postalCode')?.touched
+              "
+              placeholder="Enter your postal code"
+            />
+            <div
+              *ngIf="
+                registerForm.get('postalCode')?.invalid &&
+                registerForm.get('postalCode')?.touched
+              "
+              class="mt-1 text-sm text-red-600"
+            >
+              <div
+                *ngIf="registerForm.get('postalCode')?.errors?.['maxlength']"
+              >
+                Postal code cannot exceed 20 characters
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center">
+        <input
+          id="terms"
+          name="terms"
+          type="checkbox"
+          formControlName="terms"
+          class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+        />
+        <label for="terms" class="ml-2 block text-sm text-gray-900">
+          I agree to the
+          <a href="#" class="text-primary-600 hover:text-primary-500"
+            >Terms and Conditions</a
+          >
+          and
+          <a href="#" class="text-primary-600 hover:text-primary-500"
+            >Privacy Policy</a
+          >
+        </label>
+      </div>
+      <div
+        *ngIf="
+          registerForm.get('terms')?.invalid &&
+          registerForm.get('terms')?.touched
+        "
+        class="text-sm text-red-600"
+      >
+        You must agree to the terms and conditions
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          [disabled]="registerForm.invalid || loading"
+          class="btn-primary w-full flex justify-center py-3 px-4 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <span *ngIf="loading" class="loading-spinner w-5 h-5 mr-2"></span>
+          {{ loading ? "Creating account..." : "Create account" }}
+        </button>
+      </div>
+
+      <div *ngIf="error" class="bg-red-50 border border-red-200 rounded-md p-4">
+        <div class="flex">
+          <div class="ml-3">
+            <h3 class="text-sm font-medium text-red-800">
+              Registration failed
+            </h3>
+            <div class="mt-2 text-sm text-red-700">
+              {{ error }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

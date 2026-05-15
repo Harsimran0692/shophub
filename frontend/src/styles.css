@@ -1,0 +1,154 @@
+@layer theme, base, components, utilities;
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight" layer(base);
+@import "tailwindcss/utilities" layer(utilities);
+
+
+@source "./src/**/*.{html,ts}";
+
+@theme {
+  --color-primary-50: oklch(97% 0.03 260);
+  --color-primary-100: oklch(94% 0.05 260);
+  --color-primary-200: oklch(89% 0.08 260);
+  --color-primary-300: oklch(83% 0.12 260);
+  --color-primary-400: oklch(75% 0.16 260);
+  --color-primary-500: oklch(66% 0.2 260);
+  --color-primary-600: oklch(60% 0.2 260);
+  --color-primary-700: oklch(55% 0.22 260);
+  --color-primary-800: oklch(50% 0.18 260);
+  --color-primary-900: oklch(45% 0.15 260);
+  --color-secondary-50: oklch(97% 0.03 220);
+  --color-secondary-100: oklch(94% 0.05 220);
+  --color-secondary-200: oklch(89% 0.09 220);
+  --color-secondary-300: oklch(83% 0.14 220);
+  --color-secondary-400: oklch(75% 0.18 220);
+  --color-secondary-500: oklch(66% 0.22 220);
+  --color-secondary-600: oklch(60% 0.2 220);
+  --color-secondary-700: oklch(55% 0.18 220);
+  --color-secondary-800: oklch(50% 0.16 220);
+  --color-secondary-900: oklch(45% 0.14 220);
+  --font-family-sans: "Inter", ui-sans-serif, system-ui;
+  --animation-fade-in: fadeIn 0.5s ease-in-out;
+  --animation-slide-up: slideUp 0.3s ease-out;
+  --animation-bounce-in: bounceIn 0.6s ease-out;
+  --keyframes-fadeIn: {
+    "0%": { opacity: "0" },
+    "100%": { opacity: "1" }
+  };
+  --keyframes-slideUp: {
+    "0%": { transform: "translateY(10px)", opacity: "0" },
+    "100%": { transform: "translateY(0)", opacity: "1" }
+  };
+  --keyframes-bounceIn: {
+    "0%": { transform: "scale(0.3)", opacity: "0" },
+    "50%": { transform: "scale(1.1)" },
+    "100%": { transform: "scale(1)", opacity: "1" }
+  };
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Custom components */
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200;
+  }
+
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+  }
+
+  .section-title {
+    @apply text-2xl font-bold text-gray-900 mb-6;
+  }
+
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .loading-spinner {
+    @apply animate-spin rounded-full border-4 border-gray-200 border-t-primary-600;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-error {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .badge-info {
+    @apply bg-blue-100 text-blue-800;
+  }
+}
+
+/* Product card hover effects */
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.product-image {
+  transition: transform 0.3s ease;
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease;
+}
+
+/* Fix for Angular Material with Tailwind */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+/* Toast notifications */
+.ngx-toastr {
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}

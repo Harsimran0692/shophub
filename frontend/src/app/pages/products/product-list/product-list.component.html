@@ -1,0 +1,444 @@
+<div
+  class="min-h-screen bg-stone-950 text-stone-100"
+  style="font-family: 'Georgia', 'Times New Roman', serif"
+>
+  <!-- Page Header Bar -->
+  <div class="border-b border-stone-800 bg-stone-950">
+    <div
+      class="max-w-[1400px] mx-auto px-6 md:px-10 py-6 flex items-end justify-between gap-4"
+    >
+      <div>
+        <p class="text-xs tracking-[0.3em] uppercase text-amber-500 mb-1">
+          Browse
+        </p>
+        <h1
+          class="text-2xl md:text-3xl font-normal tracking-tight text-stone-100"
+        >
+          Products
+        </h1>
+      </div>
+      <p class="text-xs tracking-[0.15em] text-stone-500 uppercase">
+        {{ totalProducts }} results
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10 py-8">
+    <div class="flex flex-col lg:flex-row gap-10">
+      <!-- ── SIDEBAR ── -->
+      <aside class="w-full lg:w-56 shrink-0">
+        <div class="lg:sticky lg:top-6 flex flex-col gap-8">
+          <!-- Header -->
+          <div class="flex items-center gap-3">
+            <div class="h-px w-4 bg-amber-500"></div>
+            <span class="text-xs tracking-[0.3em] uppercase text-amber-500"
+              >Filters</span
+            >
+          </div>
+
+          <!-- Search -->
+          <div class="flex flex-col gap-2">
+            <label class="text-xs tracking-[0.2em] uppercase text-stone-500"
+              >Search</label
+            >
+            <div class="relative">
+              <svg
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-600 pointer-events-none"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <circle
+                  cx="6.5"
+                  cy="6.5"
+                  r="4"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                />
+                <path
+                  d="M11 11l2.5 2.5"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <input
+                type="text"
+                [(ngModel)]="searchQuery"
+                (input)="onSearchChange()"
+                placeholder="Search products…"
+                class="w-full bg-stone-900 border border-stone-800 focus:border-amber-500/60 focus:ring-0 outline-none text-sm text-stone-200 placeholder-stone-600 pl-9 pr-4 py-2.5 transition-colors duration-200"
+              />
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="h-px bg-stone-800"></div>
+
+          <!-- Category -->
+          <div class="flex flex-col gap-2">
+            <label class="text-xs tracking-[0.2em] uppercase text-stone-500"
+              >Category</label
+            >
+            <div class="relative">
+              <select
+                [(ngModel)]="selectedCategory"
+                (change)="onFilterChange()"
+                class="w-full appearance-none bg-stone-900 border border-stone-800 focus:border-amber-500/60 outline-none text-sm text-stone-200 px-4 py-2.5 cursor-pointer transition-colors duration-200"
+              >
+                <option value="">All Categories</option>
+                <option
+                  *ngFor="let category of categories"
+                  [value]="category._id"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
+              <svg
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-600 pointer-events-none"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <path
+                  d="M4 6l4 4 4-4"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="h-px bg-stone-800"></div>
+
+          <!-- Price Range -->
+          <div class="flex flex-col gap-3">
+            <label class="text-xs tracking-[0.2em] uppercase text-stone-500"
+              >Price Range</label
+            >
+            <div class="grid grid-cols-2 gap-2">
+              <div class="flex flex-col gap-1">
+                <span class="text-xs text-stone-600">Min</span>
+                <input
+                  type="number"
+                  [(ngModel)]="minPrice"
+                  (change)="onFilterChange()"
+                  placeholder="$0"
+                  class="w-full bg-stone-900 border border-stone-800 focus:border-amber-500/60 outline-none text-sm text-stone-200 placeholder-stone-600 px-3 py-2.5 transition-colors duration-200"
+                />
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="text-xs text-stone-600">Max</span>
+                <input
+                  type="number"
+                  [(ngModel)]="maxPrice"
+                  (change)="onFilterChange()"
+                  placeholder="∞"
+                  class="w-full bg-stone-900 border border-stone-800 focus:border-amber-500/60 outline-none text-sm text-stone-200 placeholder-stone-600 px-3 py-2.5 transition-colors duration-200"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="h-px bg-stone-800"></div>
+
+          <!-- Deals Only -->
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <div class="relative">
+              <input
+                type="checkbox"
+                [(ngModel)]="dealsOnly"
+                (change)="onFilterChange()"
+                class="sr-only peer"
+              />
+              <div
+                class="w-4 h-4 border border-stone-700 peer-checked:border-amber-500 peer-checked:bg-amber-500 transition-all duration-200 flex items-center justify-center"
+              >
+                <svg
+                  class="w-2.5 h-2.5 text-stone-950 opacity-0 peer-checked:opacity-100 absolute"
+                  viewBox="0 0 10 10"
+                  fill="none"
+                >
+                  <path
+                    d="M2 5l2.5 2.5L8 3"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+            <span
+              class="text-sm text-stone-400 group-hover:text-stone-200 transition-colors tracking-wide"
+              >Deals Only</span
+            >
+            <span
+              class="ml-auto text-xs bg-amber-500/10 text-amber-500 border border-amber-500/20 px-1.5 py-0.5 rounded tracking-wide"
+              >SALE</span
+            >
+          </label>
+
+          <!-- Divider -->
+          <div class="h-px bg-stone-800"></div>
+
+          <!-- Clear -->
+          <button
+            (click)="clearFilters()"
+            class="text-xs tracking-[0.2em] uppercase text-stone-500 hover:text-amber-400 transition-colors text-left border-b border-transparent hover:border-amber-400/40 pb-0.5 w-fit"
+          >
+            Clear All Filters
+          </button>
+        </div>
+      </aside>
+
+      <!-- ── MAIN CONTENT ── -->
+      <div class="flex-1 min-w-0">
+        <!-- Toolbar -->
+        <div
+          class="flex items-center justify-between gap-4 mb-8 pb-5 border-b border-stone-800"
+        >
+          <p class="text-xs text-stone-500 tracking-[0.15em] uppercase">
+            Showing <span class="text-stone-300">{{ products.length }}</span> of
+            <span class="text-stone-300">{{ totalProducts }}</span>
+          </p>
+          <div class="relative">
+            <select
+              [(ngModel)]="sortBy"
+              (change)="onSortChange()"
+              class="appearance-none bg-stone-900 border border-stone-800 focus:border-amber-500/60 outline-none text-xs text-stone-300 tracking-[0.1em] uppercase pl-4 pr-8 py-2.5 cursor-pointer transition-colors duration-200"
+            >
+              <option value="createdAt">Newest First</option>
+              <option value="price">Price: Low → High</option>
+              <option value="price-desc">Price: High → Low</option>
+              <option value="averageRating">Highest Rated</option>
+            </select>
+            <svg
+              class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-600 pointer-events-none"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <path
+                d="M4 6l4 4 4-4"
+                stroke="currentColor"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Loading Skeleton -->
+        <div
+          *ngIf="loading"
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-px bg-stone-800/50"
+        >
+          <div
+            *ngFor="let i of [1, 2, 3, 4, 5, 6]"
+            class="bg-stone-950 animate-pulse"
+          >
+            <div class="aspect-square bg-stone-900"></div>
+            <div class="p-5 space-y-3">
+              <div class="h-3 bg-stone-800 rounded w-3/4"></div>
+              <div class="h-3 bg-stone-800 rounded w-1/2"></div>
+              <div class="h-3 bg-stone-800 rounded w-1/3"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div
+          *ngIf="!loading && products.length > 0"
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-px bg-stone-800/50"
+        >
+          <div
+            *ngFor="let product of products"
+            class="group bg-stone-950 cursor-pointer hover:bg-stone-900/50 transition-colors duration-300 flex flex-col"
+            (click)="navigateToProduct(product._id)"
+          >
+            <!-- Image -->
+            <div class="relative aspect-square overflow-hidden bg-stone-900">
+              <img
+                [src]="
+                  product.images[0]?.url ||
+                  'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'
+                "
+                [alt]="product.images[0]?.altText || product.name"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+              />
+
+              <!-- Deal badge -->
+              <div
+                *ngIf="product.isDeal"
+                class="absolute top-3 left-3 bg-amber-500 text-stone-950 text-xs font-bold tracking-[0.15em] uppercase px-2 py-0.5"
+              >
+                Deal
+              </div>
+
+              <!-- Stock badge -->
+              <div
+                *ngIf="!product.isAvailable"
+                class="absolute top-3 right-3 bg-stone-900/90 text-stone-400 text-xs tracking-[0.15em] uppercase px-2 py-0.5 border border-stone-700"
+              >
+                Sold Out
+              </div>
+
+              <!-- Hover overlay -->
+              <div
+                class="absolute inset-0 bg-stone-950/0 group-hover:bg-stone-950/20 transition-colors duration-300 flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100"
+              >
+                <button
+                  (click)="addToCart(product, $event)"
+                  [disabled]="!product.isAvailable || product.stock === 0"
+                  class="bg-amber-500 hover:bg-amber-400 disabled:bg-stone-700 disabled:text-stone-500 text-stone-950 disabled:cursor-not-allowed text-xs font-bold tracking-[0.2em] uppercase px-6 py-2.5 transition-colors duration-200 shadow-lg"
+                >
+                  {{
+                    product.isAvailable && product.stock !== 0
+                      ? "Add to Cart"
+                      : "Sold Out"
+                  }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Info -->
+            <div
+              class="p-5 flex flex-col gap-2 border-t border-stone-800/60 flex-1"
+            >
+              <h3
+                class="text-sm text-stone-300 group-hover:text-stone-100 transition-colors leading-snug truncate tracking-wide"
+              >
+                {{ product.name }}
+              </h3>
+              <p class="text-xs text-stone-600 line-clamp-2 leading-relaxed">
+                {{ product.description }}
+              </p>
+
+              <div
+                class="flex items-center justify-between mt-auto pt-3 border-t border-stone-800/40"
+              >
+                <div class="flex items-baseline gap-2">
+                  <span class="text-base font-semibold text-amber-400"
+                    >${{ product.discountedPrice || product.price }}</span
+                  >
+                  <span
+                    *ngIf="
+                      product.discountedPrice &&
+                      product.discountedPrice < product.price
+                    "
+                    class="text-xs text-stone-600 line-through"
+                    >${{ product.price }}</span
+                  >
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-amber-400 text-xs">★</span>
+                  <span class="text-xs text-stone-500">{{
+                    product.averageRating
+                  }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div
+          *ngIf="!loading && products.length === 0"
+          class="flex flex-col items-center justify-center py-32 text-center"
+        >
+          <div
+            class="w-16 h-16 border border-stone-800 flex items-center justify-center mb-6 text-stone-700"
+          >
+            <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="11"
+                cy="11"
+                r="7"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M16.5 16.5L21 21"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+              <path
+                d="M8 11h6M11 8v6"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <h3 class="text-lg font-normal text-stone-300 mb-2 tracking-wide">
+            No products found
+          </h3>
+          <p class="text-sm text-stone-600 mb-8">
+            Try adjusting your filters or search query
+          </p>
+          <button
+            (click)="clearFilters()"
+            class="text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-amber-400 transition-colors border border-stone-700 hover:border-amber-500/50 px-6 py-3"
+          >
+            Clear All Filters
+          </button>
+        </div>
+
+        <!-- Pagination -->
+        <div
+          *ngIf="totalPages > 1"
+          class="flex items-center justify-center gap-1.5 mt-12 pt-8 border-t border-stone-800"
+        >
+          <button
+            (click)="changePage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+            class="w-9 h-9 flex items-center justify-center border border-stone-800 hover:border-amber-500/50 text-stone-500 hover:text-amber-400 disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-200"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M10 3L6 8l4 5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+
+          <button
+            *ngFor="let page of getPageNumbers()"
+            (click)="changePage(page)"
+            class="w-9 h-9 flex items-center justify-center border text-xs tracking-wider font-medium transition-all duration-200"
+            [ngClass]="
+              page === currentPage
+                ? 'border-amber-500 bg-amber-500 text-stone-950'
+                : 'border-stone-800 text-stone-500 hover:border-stone-600 hover:text-stone-300'
+            "
+          >
+            {{ page }}
+          </button>
+
+          <button
+            (click)="changePage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+            class="w-9 h-9 flex items-center justify-center border border-stone-800 hover:border-amber-500/50 text-stone-500 hover:text-amber-400 disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-200"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M6 3l4 5-4 5"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

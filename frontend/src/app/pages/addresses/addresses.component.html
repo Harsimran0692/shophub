@@ -1,0 +1,464 @@
+<div class="min-h-screen bg-gray-100 flex flex-col">
+  <div class="container mx-auto px-4 py-8 max-w-5xl">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900">My Addresses</h1>
+      <button
+        (click)="showAddForm = true"
+        class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center"
+      >
+        <svg
+          class="w-5 h-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+        Add New Address
+      </button>
+    </div>
+
+    <!-- Add/Edit Address Form -->
+    <div
+      *ngIf="showAddForm || editingAddress"
+      class="bg-white rounded-xl shadow-lg p-6 mb-8"
+    >
+      <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+        {{ editingAddress ? "Edit Address" : "Add New Address" }}
+      </h2>
+
+      <form
+        [formGroup]="addressForm"
+        (ngSubmit)="saveAddress()"
+        class="grid grid-cols-1 md:grid-cols-2 gap-6"
+      >
+        <!-- First Name -->
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 mb-1"
+            for="firstName"
+          >
+            First Name *
+          </label>
+          <input
+            id="firstName"
+            type="text"
+            formControlName="firstName"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter first name"
+          />
+          <div
+            *ngIf="
+              addressForm.get('firstName')?.invalid &&
+              addressForm.get('firstName')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            First name is required
+          </div>
+        </div>
+
+        <!-- Last Name -->
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 mb-1"
+            for="lastName"
+          >
+            Last Name
+          </label>
+          <input
+            id="lastName"
+            type="text"
+            formControlName="lastName"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter last name (optional)"
+          />
+        </div>
+
+        <!-- Street Address -->
+        <div class="md:col-span-2">
+          <label
+            class="block text-sm font-medium text-gray-700 mb-1"
+            for="streetAddress"
+          >
+            Street Address *
+          </label>
+          <input
+            id="streetAddress"
+            type="text"
+            formControlName="streetAddress"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter street address"
+          />
+          <div
+            *ngIf="
+              addressForm.get('streetAddress')?.invalid &&
+              addressForm.get('streetAddress')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            Street address is required
+          </div>
+        </div>
+
+        <!-- Postal Code -->
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 mb-1"
+            for="postalCode"
+          >
+            Postal Code *
+          </label>
+          <input
+            id="postalCode"
+            type="text"
+            formControlName="postalCode"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter postal code"
+          />
+          <div
+            *ngIf="
+              addressForm.get('postalCode')?.invalid &&
+              addressForm.get('postalCode')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            Postal code is required
+          </div>
+        </div>
+
+        <!-- Country -->
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 mb-1"
+            for="country"
+          >
+            Country *
+          </label>
+          <select
+            id="country"
+            formControlName="country"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="" disabled>Select country</option>
+            <option value="CA">Canada</option>
+            <option value="US">United States</option>
+            <option value="GB">United Kingdom</option>
+            <option value="AU">Australia</option>
+            <!-- Add more countries as needed -->
+          </select>
+          <div
+            *ngIf="
+              addressForm.get('country')?.invalid &&
+              addressForm.get('country')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            Country is required
+          </div>
+        </div>
+
+        <!-- Region -->
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 mb-1"
+            for="region"
+          >
+            Region/State {{ addressForm.get("country")?.value }}
+          </label>
+          <select
+            id="region"
+            formControlName="region"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [disabled]="
+              !['US', 'CA'].includes(addressForm.get('country')?.value)
+            "
+          >
+            <option value="" disabled>Select region</option>
+            <ng-container *ngIf="addressForm.get('country')?.value === 'CA'">
+              <option *ngFor="let region of canadianRegions" [value]="region">
+                {{ region }}
+              </option>
+            </ng-container>
+            <ng-container *ngIf="addressForm.get('country')?.value === 'US'">
+              <option *ngFor="let region of usRegions" [value]="region">
+                {{ region }}
+              </option>
+            </ng-container>
+          </select>
+          <div
+            *ngIf="
+              addressForm.get('region')?.invalid &&
+              addressForm.get('region')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            Region is required for US and Canada
+          </div>
+        </div>
+
+        <!-- Phone Number -->
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 mb-1"
+            for="phoneNumber"
+          >
+            Phone Number
+          </label>
+          <input
+            id="phoneNumber"
+            type="tel"
+            formControlName="phoneNumber"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter phone number (optional)"
+          />
+          <div
+            *ngIf="
+              addressForm.get('phoneNumber')?.invalid &&
+              addressForm.get('phoneNumber')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            Phone number must be 10-15 digits
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 mb-1"
+            for="email"
+          >
+            Email (Optional)
+          </label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Enter email address"
+          />
+          <div
+            *ngIf="
+              addressForm.get('email')?.invalid &&
+              addressForm.get('email')?.touched
+            "
+            class="mt-1 text-sm text-red-600"
+          >
+            Please enter a valid email
+          </div>
+        </div>
+
+        <!-- Address Type -->
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 mb-1"
+            for="addressType"
+          >
+            Address Type
+          </label>
+          <select
+            id="addressType"
+            formControlName="addressType"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="shipping">Shipping</option>
+            <option value="billing">Billing</option>
+          </select>
+        </div>
+
+        <!-- Default Checkbox -->
+        <div class="md:col-span-2 flex items-center">
+          <input
+            id="isDefault"
+            type="checkbox"
+            formControlName="isDefault"
+            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          />
+          <label for="isDefault" class="ml-2 text-sm font-medium text-gray-700">
+            Set as default address
+          </label>
+        </div>
+
+        <!-- Form Buttons -->
+        <div class="md:col-span-2 flex justify-end space-x-4 mt-4">
+          <button
+            type="button"
+            (click)="cancelForm()"
+            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="addressForm.invalid || saving"
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+          >
+            <svg
+              *ngIf="saving"
+              class="animate-spin w-5 h-5 mr-2 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              />
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+            {{
+              saving
+                ? "Saving..."
+                : editingAddress
+                ? "Update Address"
+                : "Add Address"
+            }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Addresses List -->
+    <div
+      *ngIf="!loading && addresses.length"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
+      <div
+        *ngFor="let address of addresses"
+        class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-200 border border-gray-200"
+      >
+        <div class="flex justify-between items-start mb-4">
+          <div class="flex-1">
+            <h3 class="text-lg font-semibold text-gray-900">
+              {{ address.firstName }} {{ address.lastName || "" }}
+              <span
+                *ngIf="address.isDefault"
+                class="ml-2 inline-flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full"
+              >
+                Default
+              </span>
+            </h3>
+            <p class="text-gray-700 mt-2">
+              {{ address.streetAddress }}
+            </p>
+            <p class="text-gray-700">
+              {{ address.region ? address.region + "," : "" }}
+              {{ address.country }} {{ address.postalCode }}
+            </p>
+            <p class="text-gray-600 text-sm mt-1">
+              📞 {{ address.phoneNumber || "N/A" }}
+            </p>
+            <p *ngIf="address.email" class="text-gray-600 text-sm">
+              ✉️ {{ address.email }}
+            </p>
+            <p class="text-gray-600 text-sm capitalize">
+              {{ address.addressType }} Address
+            </p>
+          </div>
+          <div class="flex space-x-2">
+            <button
+              (click)="editAddress(address)"
+              class="text-blue-600 hover:text-blue-800 p-2"
+              title="Edit Address"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+            </button>
+            <button
+              (click)="deleteAddress(address._id)"
+              class="text-red-600 hover:text-red-800 p-2"
+              title="Delete Address"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div
+          class="flex justify-between items-center pt-4 border-t border-gray-200"
+        >
+          <span class="text-sm text-gray-500">
+            Address #{{ address._id.slice(-6) }}
+          </span>
+          <button
+            *ngIf="!address.isDefault"
+            (click)="setDefaultAddress(address._id)"
+            class="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          >
+            Set as Default
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      *ngIf="!loading && !addresses?.length"
+      class="text-center py-16 bg-white rounded-xl shadow-lg"
+    >
+      <div class="text-gray-400 text-6xl mb-4">📍</div>
+      <h3 class="text-2xl font-bold text-gray-900 mb-4">No Addresses Found</h3>
+      <p class="text-gray-600 mb-6">
+        Add your first address to make checkout faster.
+      </p>
+      <button
+        (click)="showAddForm = true"
+        class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+      >
+        + Add Your First Address
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div
+      *ngIf="loading"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
+      <div
+        *ngFor="let i of [1, 2, 3]"
+        class="bg-white rounded-xl shadow-lg p-6 animate-pulse"
+      >
+        <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+        <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+        <div class="h-4 bg-gray-200 rounded w-2/3 mb-2"></div>
+        <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+      </div>
+    </div>
+  </div>
+</div>
