@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import {
   Product,
   Category,
@@ -9,8 +9,8 @@ import {
   CategorySpec,
   Review,
 } from '../models/product.interface';
-import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment.prod';
 
 export interface ProductQueryParams {
   page?: number;

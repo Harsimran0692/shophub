@@ -16,7 +16,7 @@ import {
   GoogleLoginRequest,
   GoogleLoginResponse,
 } from '.././models/user.interface';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.prod';
 import { Router } from '@angular/router';
 
 declare let google: any;
