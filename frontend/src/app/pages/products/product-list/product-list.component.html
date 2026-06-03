@@ -1,23 +1,36 @@
 <div
-  class="min-h-screen bg-stone-950 text-stone-100"
-  style="font-family: 'Georgia', 'Times New Roman', serif"
+  class="min-h-screen text-slate-900"
+  style="font-family: 'Playfair Display', 'Georgia', serif; background: #f8fafc"
 >
+  <!-- Top accent line -->
+  <div
+    class="h-1"
+    style="background: linear-gradient(90deg, #3b82f6, #0f766e, #f59e0b)"
+  ></div>
+
   <!-- Page Header Bar -->
-  <div class="border-b border-stone-800 bg-stone-950">
+  <div style="border-bottom: 1px solid #e2e8f0; background: #ffffff">
     <div
       class="max-w-[1400px] mx-auto px-6 md:px-10 py-6 flex items-end justify-between gap-4"
     >
       <div>
-        <p class="text-xs tracking-[0.3em] uppercase text-amber-500 mb-1">
+        <p
+          class="text-xs tracking-[0.3em] uppercase mb-1 font-bold"
+          style="font-family: 'DM Sans', sans-serif; color: #3b82f6"
+        >
           Browse
         </p>
         <h1
-          class="text-2xl md:text-3xl font-normal tracking-tight text-stone-100"
+          class="text-2xl md:text-3xl font-normal tracking-tight"
+          style="color: #0f172a"
         >
           Products
         </h1>
       </div>
-      <p class="text-xs tracking-[0.15em] text-stone-500 uppercase">
+      <p
+        class="text-xs tracking-[0.15em] uppercase"
+        style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+      >
         {{ totalProducts }} results
       </p>
     </div>
@@ -26,24 +39,37 @@
   <div class="max-w-[1400px] mx-auto px-6 md:px-10 py-8">
     <div class="flex flex-col lg:flex-row gap-10">
       <!-- ── SIDEBAR ── -->
-      <aside class="w-full lg:w-56 shrink-0">
-        <div class="lg:sticky lg:top-6 flex flex-col gap-8">
+      <aside class="w-full lg:w-60 shrink-0">
+        <div
+          class="lg:sticky lg:top-6 flex flex-col gap-6 p-6"
+          style="
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+          "
+        >
           <!-- Header -->
           <div class="flex items-center gap-3">
-            <div class="h-px w-4 bg-amber-500"></div>
-            <span class="text-xs tracking-[0.3em] uppercase text-amber-500"
+            <div class="h-0.5 w-4" style="background: #3b82f6"></div>
+            <span
+              class="text-xs tracking-[0.3em] uppercase font-bold"
+              style="font-family: 'DM Sans', sans-serif; color: #3b82f6"
               >Filters</span
             >
           </div>
 
           <!-- Search -->
           <div class="flex flex-col gap-2">
-            <label class="text-xs tracking-[0.2em] uppercase text-stone-500"
+            <label
+              class="text-xs tracking-[0.2em] uppercase font-semibold"
+              style="font-family: 'DM Sans', sans-serif; color: #64748b"
               >Search</label
             >
             <div class="relative">
               <svg
-                class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-600 pointer-events-none"
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none"
+                style="color: #94a3b8"
                 viewBox="0 0 16 16"
                 fill="none"
               >
@@ -66,24 +92,44 @@
                 [(ngModel)]="searchQuery"
                 (input)="onSearchChange()"
                 placeholder="Search products…"
-                class="w-full bg-stone-900 border border-stone-800 focus:border-amber-500/60 focus:ring-0 outline-none text-sm text-stone-200 placeholder-stone-600 pl-9 pr-4 py-2.5 transition-colors duration-200"
+                class="w-full text-sm pl-9 pr-4 py-2.5 outline-none transition-all duration-200"
+                style="
+                  font-family: 'DM Sans', sans-serif;
+                  background: #f8fafc;
+                  border: 1.5px solid #e2e8f0;
+                  border-radius: 6px;
+                  color: #1e293b;
+                "
+                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'"
+                onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
               />
             </div>
           </div>
 
           <!-- Divider -->
-          <div class="h-px bg-stone-800"></div>
+          <div class="h-px" style="background: #f1f5f9"></div>
 
           <!-- Category -->
           <div class="flex flex-col gap-2">
-            <label class="text-xs tracking-[0.2em] uppercase text-stone-500"
+            <label
+              class="text-xs tracking-[0.2em] uppercase font-semibold"
+              style="font-family: 'DM Sans', sans-serif; color: #64748b"
               >Category</label
             >
             <div class="relative">
               <select
                 [(ngModel)]="selectedCategory"
                 (change)="onFilterChange()"
-                class="w-full appearance-none bg-stone-900 border border-stone-800 focus:border-amber-500/60 outline-none text-sm text-stone-200 px-4 py-2.5 cursor-pointer transition-colors duration-200"
+                class="w-full appearance-none text-sm px-4 py-2.5 cursor-pointer outline-none transition-all duration-200"
+                style="
+                  font-family: 'DM Sans', sans-serif;
+                  background: #f8fafc;
+                  border: 1.5px solid #e2e8f0;
+                  border-radius: 6px;
+                  color: #1e293b;
+                "
+                onfocus="this.style.borderColor='#3b82f6'"
+                onblur="this.style.borderColor='#e2e8f0'"
               >
                 <option value="">All Categories</option>
                 <option
@@ -94,7 +140,8 @@
                 </option>
               </select>
               <svg
-                class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-600 pointer-events-none"
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none"
+                style="color: #94a3b8"
                 viewBox="0 0 16 16"
                 fill="none"
               >
@@ -110,43 +157,71 @@
           </div>
 
           <!-- Divider -->
-          <div class="h-px bg-stone-800"></div>
+          <div class="h-px" style="background: #f1f5f9"></div>
 
           <!-- Price Range -->
           <div class="flex flex-col gap-3">
-            <label class="text-xs tracking-[0.2em] uppercase text-stone-500"
+            <label
+              class="text-xs tracking-[0.2em] uppercase font-semibold"
+              style="font-family: 'DM Sans', sans-serif; color: #64748b"
               >Price Range</label
             >
             <div class="grid grid-cols-2 gap-2">
               <div class="flex flex-col gap-1">
-                <span class="text-xs text-stone-600">Min</span>
+                <span
+                  class="text-xs"
+                  style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+                  >Min</span
+                >
                 <input
                   type="number"
                   [(ngModel)]="minPrice"
                   (change)="onFilterChange()"
                   placeholder="$0"
-                  class="w-full bg-stone-900 border border-stone-800 focus:border-amber-500/60 outline-none text-sm text-stone-200 placeholder-stone-600 px-3 py-2.5 transition-colors duration-200"
+                  class="w-full text-sm px-3 py-2.5 outline-none transition-all duration-200"
+                  style="
+                    font-family: 'DM Sans', sans-serif;
+                    background: #f8fafc;
+                    border: 1.5px solid #e2e8f0;
+                    border-radius: 6px;
+                    color: #1e293b;
+                  "
+                  onfocus="this.style.borderColor='#3b82f6'"
+                  onblur="this.style.borderColor='#e2e8f0'"
                 />
               </div>
               <div class="flex flex-col gap-1">
-                <span class="text-xs text-stone-600">Max</span>
+                <span
+                  class="text-xs"
+                  style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+                  >Max</span
+                >
                 <input
                   type="number"
                   [(ngModel)]="maxPrice"
                   (change)="onFilterChange()"
                   placeholder="∞"
-                  class="w-full bg-stone-900 border border-stone-800 focus:border-amber-500/60 outline-none text-sm text-stone-200 placeholder-stone-600 px-3 py-2.5 transition-colors duration-200"
+                  class="w-full text-sm px-3 py-2.5 outline-none transition-all duration-200"
+                  style="
+                    font-family: 'DM Sans', sans-serif;
+                    background: #f8fafc;
+                    border: 1.5px solid #e2e8f0;
+                    border-radius: 6px;
+                    color: #1e293b;
+                  "
+                  onfocus="this.style.borderColor='#3b82f6'"
+                  onblur="this.style.borderColor='#e2e8f0'"
                 />
               </div>
             </div>
           </div>
 
           <!-- Divider -->
-          <div class="h-px bg-stone-800"></div>
+          <div class="h-px" style="background: #f1f5f9"></div>
 
           <!-- Deals Only -->
           <label class="flex items-center gap-3 cursor-pointer group">
-            <div class="relative">
+            <div class="relative shrink-0">
               <input
                 type="checkbox"
                 [(ngModel)]="dealsOnly"
@@ -154,10 +229,16 @@
                 class="sr-only peer"
               />
               <div
-                class="w-4 h-4 border border-stone-700 peer-checked:border-amber-500 peer-checked:bg-amber-500 transition-all duration-200 flex items-center justify-center"
+                class="w-4 h-4 border-2 transition-all duration-200 flex items-center justify-center"
+                style="
+                  border-color: #cbd5e1;
+                  border-radius: 4px;
+                  background: #f8fafc;
+                "
               >
                 <svg
-                  class="w-2.5 h-2.5 text-stone-950 opacity-0 peer-checked:opacity-100 absolute"
+                  class="w-2.5 h-2.5 opacity-0 peer-checked:opacity-100 absolute"
+                  style="color: #ffffff"
                   viewBox="0 0 10 10"
                   fill="none"
                 >
@@ -172,22 +253,37 @@
               </div>
             </div>
             <span
-              class="text-sm text-stone-400 group-hover:text-stone-200 transition-colors tracking-wide"
+              class="text-sm tracking-wide transition-colors"
+              style="font-family: 'DM Sans', sans-serif; color: #475569"
               >Deals Only</span
             >
             <span
-              class="ml-auto text-xs bg-amber-500/10 text-amber-500 border border-amber-500/20 px-1.5 py-0.5 rounded tracking-wide"
+              class="ml-auto text-xs font-bold px-1.5 py-0.5 tracking-wide"
+              style="
+                font-family: 'DM Sans', sans-serif;
+                background: #fff7ed;
+                color: #f59e0b;
+                border: 1px solid #fde68a;
+                border-radius: 4px;
+              "
               >SALE</span
             >
           </label>
 
           <!-- Divider -->
-          <div class="h-px bg-stone-800"></div>
+          <div class="h-px" style="background: #f1f5f9"></div>
 
           <!-- Clear -->
           <button
             (click)="clearFilters()"
-            class="text-xs tracking-[0.2em] uppercase text-stone-500 hover:text-amber-400 transition-colors text-left border-b border-transparent hover:border-amber-400/40 pb-0.5 w-fit"
+            class="text-xs tracking-[0.2em] uppercase transition-colors text-left w-fit pb-0.5"
+            style="
+              font-family: 'DM Sans', sans-serif;
+              color: #94a3b8;
+              border-bottom: 1px solid transparent;
+            "
+            onmouseover="this.style.color='#ef4444'; this.style.borderBottomColor='#fecaca'"
+            onmouseout="this.style.color='#94a3b8'; this.style.borderBottomColor='transparent'"
           >
             Clear All Filters
           </button>
@@ -198,17 +294,36 @@
       <div class="flex-1 min-w-0">
         <!-- Toolbar -->
         <div
-          class="flex items-center justify-between gap-4 mb-8 pb-5 border-b border-stone-800"
+          class="flex items-center justify-between gap-4 mb-6 pb-5"
+          style="border-bottom: 1px solid #e2e8f0"
         >
-          <p class="text-xs text-stone-500 tracking-[0.15em] uppercase">
-            Showing <span class="text-stone-300">{{ products.length }}</span> of
-            <span class="text-stone-300">{{ totalProducts }}</span>
+          <p
+            class="text-xs tracking-[0.15em] uppercase"
+            style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+          >
+            Showing
+            <span style="color: #1e293b; font-weight: 600">{{
+              products.length
+            }}</span>
+            of
+            <span style="color: #1e293b; font-weight: 600">{{
+              totalProducts
+            }}</span>
           </p>
           <div class="relative">
             <select
               [(ngModel)]="sortBy"
               (change)="onSortChange()"
-              class="appearance-none bg-stone-900 border border-stone-800 focus:border-amber-500/60 outline-none text-xs text-stone-300 tracking-[0.1em] uppercase pl-4 pr-8 py-2.5 cursor-pointer transition-colors duration-200"
+              class="appearance-none text-xs tracking-[0.1em] uppercase pl-4 pr-8 py-2.5 cursor-pointer outline-none transition-all duration-200"
+              style="
+                font-family: 'DM Sans', sans-serif;
+                background: #ffffff;
+                border: 1.5px solid #e2e8f0;
+                border-radius: 6px;
+                color: #334155;
+              "
+              onfocus="this.style.borderColor='#3b82f6'"
+              onblur="this.style.borderColor='#e2e8f0'"
             >
               <option value="createdAt">Newest First</option>
               <option value="price">Price: Low → High</option>
@@ -216,7 +331,8 @@
               <option value="averageRating">Highest Rated</option>
             </select>
             <svg
-              class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-600 pointer-events-none"
+              class="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none"
+              style="color: #94a3b8"
               viewBox="0 0 16 16"
               fill="none"
             >
@@ -234,17 +350,23 @@
         <!-- Loading Skeleton -->
         <div
           *ngIf="loading"
-          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-px bg-stone-800/50"
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"
         >
           <div
             *ngFor="let i of [1, 2, 3, 4, 5, 6]"
-            class="bg-stone-950 animate-pulse"
+            class="animate-pulse"
+            style="
+              background: #ffffff;
+              border: 1px solid #f1f5f9;
+              border-radius: 8px;
+              overflow: hidden;
+            "
           >
-            <div class="aspect-square bg-stone-900"></div>
+            <div class="aspect-square" style="background: #f1f5f9"></div>
             <div class="p-5 space-y-3">
-              <div class="h-3 bg-stone-800 rounded w-3/4"></div>
-              <div class="h-3 bg-stone-800 rounded w-1/2"></div>
-              <div class="h-3 bg-stone-800 rounded w-1/3"></div>
+              <div class="h-3 rounded w-3/4" style="background: #e2e8f0"></div>
+              <div class="h-3 rounded w-1/2" style="background: #e2e8f0"></div>
+              <div class="h-3 rounded w-1/3" style="background: #e2e8f0"></div>
             </div>
           </div>
         </div>
@@ -252,28 +374,43 @@
         <!-- Products Grid -->
         <div
           *ngIf="!loading && products.length > 0"
-          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-px bg-stone-800/50"
+          class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"
         >
           <div
             *ngFor="let product of products"
-            class="group bg-stone-950 cursor-pointer hover:bg-stone-900/50 transition-colors duration-300 flex flex-col"
+            class="group cursor-pointer flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+            style="
+              background: #ffffff;
+              border: 1px solid #f1f5f9;
+              border-radius: 8px;
+              overflow: hidden;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            "
             (click)="navigateToProduct(product._id)"
           >
             <!-- Image -->
-            <div class="relative aspect-square overflow-hidden bg-stone-900">
+            <div
+              class="relative aspect-square overflow-hidden"
+              style="background: #f8fafc"
+            >
               <img
                 [src]="
                   product.images[0]?.url ||
                   'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'
                 "
                 [alt]="product.images[0]?.altText || product.name"
-                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
 
               <!-- Deal badge -->
               <div
                 *ngIf="product.isDeal"
-                class="absolute top-3 left-3 bg-amber-500 text-stone-950 text-xs font-bold tracking-[0.15em] uppercase px-2 py-0.5"
+                class="absolute top-3 left-3 text-white text-xs font-bold tracking-[0.15em] uppercase px-2.5 py-1"
+                style="
+                  font-family: 'DM Sans', sans-serif;
+                  background: linear-gradient(135deg, #ef4444, #f97316);
+                  border-radius: 4px;
+                "
               >
                 Deal
               </div>
@@ -281,19 +418,50 @@
               <!-- Stock badge -->
               <div
                 *ngIf="!product.isAvailable"
-                class="absolute top-3 right-3 bg-stone-900/90 text-stone-400 text-xs tracking-[0.15em] uppercase px-2 py-0.5 border border-stone-700"
+                class="absolute top-3 right-3 text-xs tracking-[0.15em] uppercase px-2.5 py-1"
+                style="
+                  font-family: 'DM Sans', sans-serif;
+                  background: rgba(248, 250, 252, 0.9);
+                  color: #94a3b8;
+                  border: 1px solid #e2e8f0;
+                  border-radius: 4px;
+                  backdrop-filter: blur(4px);
+                "
               >
                 Sold Out
               </div>
 
-              <!-- Hover overlay -->
+              <!-- Hover overlay + Add to Cart -->
               <div
-                class="absolute inset-0 bg-stone-950/0 group-hover:bg-stone-950/20 transition-colors duration-300 flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100"
+                class="absolute inset-0 flex items-end justify-center pb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style="background: rgba(15, 23, 42, 0.35)"
               >
                 <button
                   (click)="addToCart(product, $event)"
                   [disabled]="!product.isAvailable || product.stock === 0"
-                  class="bg-amber-500 hover:bg-amber-400 disabled:bg-stone-700 disabled:text-stone-500 text-stone-950 disabled:cursor-not-allowed text-xs font-bold tracking-[0.2em] uppercase px-6 py-2.5 transition-colors duration-200 shadow-lg"
+                  class="text-xs font-bold tracking-[0.2em] uppercase px-6 py-2.5 transition-all duration-200 shadow-lg"
+                  style="
+                    font-family: 'DM Sans', sans-serif;
+                    background: #3b82f6;
+                    color: #ffffff;
+                    border-radius: 4px;
+                    border: none;
+                  "
+                  [style.background]="
+                    !product.isAvailable || product.stock === 0
+                      ? '#e2e8f0'
+                      : '#3b82f6'
+                  "
+                  [style.color]="
+                    !product.isAvailable || product.stock === 0
+                      ? '#94a3b8'
+                      : '#ffffff'
+                  "
+                  [style.cursor]="
+                    !product.isAvailable || product.stock === 0
+                      ? 'not-allowed'
+                      : 'pointer'
+                  "
                 >
                   {{
                     product.isAvailable && product.stock !== 0
@@ -306,22 +474,30 @@
 
             <!-- Info -->
             <div
-              class="p-5 flex flex-col gap-2 border-t border-stone-800/60 flex-1"
+              class="p-5 flex flex-col gap-2 flex-1"
+              style="border-top: 1px solid #f1f5f9"
             >
               <h3
-                class="text-sm text-stone-300 group-hover:text-stone-100 transition-colors leading-snug truncate tracking-wide"
+                class="text-sm leading-snug truncate tracking-wide transition-colors"
+                style="font-family: 'DM Sans', sans-serif; color: #334155"
               >
                 {{ product.name }}
               </h3>
-              <p class="text-xs text-stone-600 line-clamp-2 leading-relaxed">
+              <p
+                class="text-xs line-clamp-2 leading-relaxed"
+                style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+              >
                 {{ product.description }}
               </p>
 
               <div
-                class="flex items-center justify-between mt-auto pt-3 border-t border-stone-800/40"
+                class="flex items-center justify-between mt-auto pt-3"
+                style="border-top: 1px solid #f1f5f9"
               >
                 <div class="flex items-baseline gap-2">
-                  <span class="text-base font-semibold text-amber-400"
+                  <span
+                    class="text-base font-bold"
+                    style="font-family: 'DM Sans', sans-serif; color: #3b82f6"
                     >${{ product.discountedPrice || product.price }}</span
                   >
                   <span
@@ -329,15 +505,18 @@
                       product.discountedPrice &&
                       product.discountedPrice < product.price
                     "
-                    class="text-xs text-stone-600 line-through"
+                    class="text-xs line-through"
+                    style="font-family: 'DM Sans', sans-serif; color: #cbd5e1"
                     >${{ product.price }}</span
                   >
                 </div>
                 <div class="flex items-center gap-1.5">
-                  <span class="text-amber-400 text-xs">★</span>
-                  <span class="text-xs text-stone-500">{{
-                    product.averageRating
-                  }}</span>
+                  <span style="color: #f59e0b; font-size: 12px">★</span>
+                  <span
+                    class="text-xs"
+                    style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+                    >{{ product.averageRating }}</span
+                  >
                 </div>
               </div>
             </div>
@@ -350,7 +529,13 @@
           class="flex flex-col items-center justify-center py-32 text-center"
         >
           <div
-            class="w-16 h-16 border border-stone-800 flex items-center justify-center mb-6 text-stone-700"
+            class="w-16 h-16 flex items-center justify-center mb-6"
+            style="
+              background: #eff6ff;
+              border: 1.5px solid #bfdbfe;
+              border-radius: 50%;
+              color: #3b82f6;
+            "
           >
             <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none">
               <circle
@@ -374,15 +559,30 @@
               />
             </svg>
           </div>
-          <h3 class="text-lg font-normal text-stone-300 mb-2 tracking-wide">
+          <h3
+            class="text-lg font-normal mb-2 tracking-wide"
+            style="color: #334155"
+          >
             No products found
           </h3>
-          <p class="text-sm text-stone-600 mb-8">
+          <p
+            class="text-sm mb-8"
+            style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+          >
             Try adjusting your filters or search query
           </p>
           <button
             (click)="clearFilters()"
-            class="text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-amber-400 transition-colors border border-stone-700 hover:border-amber-500/50 px-6 py-3"
+            class="text-xs tracking-[0.2em] uppercase transition-all px-6 py-3"
+            style="
+              font-family: 'DM Sans', sans-serif;
+              color: #3b82f6;
+              border: 1.5px solid #3b82f6;
+              border-radius: 6px;
+              background: transparent;
+            "
+            onmouseover="this.style.background='#eff6ff'"
+            onmouseout="this.style.background='transparent'"
           >
             Clear All Filters
           </button>
@@ -391,12 +591,21 @@
         <!-- Pagination -->
         <div
           *ngIf="totalPages > 1"
-          class="flex items-center justify-center gap-1.5 mt-12 pt-8 border-t border-stone-800"
+          class="flex items-center justify-center gap-1.5 mt-12 pt-8"
+          style="border-top: 1px solid #e2e8f0"
         >
           <button
             (click)="changePage(currentPage - 1)"
             [disabled]="currentPage === 1"
-            class="w-9 h-9 flex items-center justify-center border border-stone-800 hover:border-amber-500/50 text-stone-500 hover:text-amber-400 disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-200"
+            class="w-9 h-9 flex items-center justify-center transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+            style="
+              border: 1.5px solid #e2e8f0;
+              border-radius: 6px;
+              background: #ffffff;
+              color: #64748b;
+            "
+            onmouseover="this.style.borderColor='#3b82f6'; this.style.color='#3b82f6'"
+            onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'"
           >
             <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
               <path
@@ -412,11 +621,14 @@
           <button
             *ngFor="let page of getPageNumbers()"
             (click)="changePage(page)"
-            class="w-9 h-9 flex items-center justify-center border text-xs tracking-wider font-medium transition-all duration-200"
-            [ngClass]="
+            class="w-9 h-9 flex items-center justify-center text-xs font-semibold tracking-wider transition-all duration-200"
+            style="border-radius: 6px; font-family: 'DM Sans', sans-serif"
+            [style.background]="page === currentPage ? '#3b82f6' : '#ffffff'"
+            [style.color]="page === currentPage ? '#ffffff' : '#64748b'"
+            [style.border]="
               page === currentPage
-                ? 'border-amber-500 bg-amber-500 text-stone-950'
-                : 'border-stone-800 text-stone-500 hover:border-stone-600 hover:text-stone-300'
+                ? '1.5px solid #3b82f6'
+                : '1.5px solid #e2e8f0'
             "
           >
             {{ page }}
@@ -425,7 +637,15 @@
           <button
             (click)="changePage(currentPage + 1)"
             [disabled]="currentPage === totalPages"
-            class="w-9 h-9 flex items-center justify-center border border-stone-800 hover:border-amber-500/50 text-stone-500 hover:text-amber-400 disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-200"
+            class="w-9 h-9 flex items-center justify-center transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+            style="
+              border: 1.5px solid #e2e8f0;
+              border-radius: 6px;
+              background: #ffffff;
+              color: #64748b;
+            "
+            onmouseover="this.style.borderColor='#3b82f6'; this.style.color='#3b82f6'"
+            onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'"
           >
             <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
               <path

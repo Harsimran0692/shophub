@@ -1,26 +1,44 @@
 <div
-  class="min-h-screen text-stone-200"
+  class="min-h-screen text-slate-900"
   style="
-    background-color: #1c1917;
-    font-family: 'Georgia', 'Times New Roman', serif;
+    background-color: #f8fafc;
+    font-family: 'Playfair Display', 'Georgia', serif;
   "
   *ngIf="product"
 >
+  <!-- Top accent line -->
+  <div
+    class="h-1"
+    style="background: linear-gradient(90deg, #3b82f6, #0f766e, #f59e0b)"
+  ></div>
+
   <!-- Breadcrumb -->
-  <div style="background-color: #1c1917; border-bottom: 1px solid #2d2926">
+  <div style="background-color: #ffffff; border-bottom: 1px solid #e2e8f0">
     <div
       class="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center gap-2 text-xs tracking-[0.18em] uppercase"
-      style="color: #6b6560"
+      style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
     >
-      <a routerLink="/" class="hover:text-amber-400 transition-colors">Home</a>
-      <span style="color: #3d3733">›</span>
-      <a routerLink="/products" class="hover:text-amber-400 transition-colors"
+      <a
+        routerLink="/"
+        style="color: #94a3b8"
+        onmouseover="this.style.color='#3b82f6'"
+        onmouseout="this.style.color='#94a3b8'"
+        class="transition-colors"
+        >Home</a
+      >
+      <span style="color: #cbd5e1">›</span>
+      <a
+        routerLink="/products"
+        style="color: #94a3b8"
+        onmouseover="this.style.color='#3b82f6'"
+        onmouseout="this.style.color='#94a3b8'"
+        class="transition-colors"
         >Products</a
       >
-      <span style="color: #3d3733">›</span>
+      <span style="color: #cbd5e1">›</span>
       <span
         class="truncate max-w-xs normal-case tracking-normal"
-        style="color: #a09890"
+        style="color: #475569"
         >{{ product.name }}</span
       >
     </div>
@@ -30,12 +48,16 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
       <!-- ── IMAGE SECTION ── -->
       <div class="lg:sticky lg:top-8 flex flex-col gap-3">
-        <!-- Main image viewport: square aspect, not too tall -->
+        <!-- Main image -->
         <div
           class="relative overflow-hidden group"
-          style="aspect-ratio: 1/1; background-color: #252220"
+          style="
+            aspect-ratio: 1/1;
+            background-color: #f1f5f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+          "
         >
-          <!-- Carousel: each slide is 100% of the viewport width, strip is N×100% wide -->
           <div
             class="flex h-full transition-transform duration-500 ease-in-out"
             [style.width.%]="product.images.length * 100"
@@ -63,11 +85,11 @@
 
           <!-- Bottom gradient -->
           <div
-            class="absolute inset-x-0 bottom-0 h-20 pointer-events-none"
+            class="absolute inset-x-0 bottom-0 h-16 pointer-events-none"
             style="
               background: linear-gradient(
                 to top,
-                rgba(28, 25, 23, 0.5),
+                rgba(241, 245, 249, 0.6),
                 transparent
               );
             "
@@ -76,21 +98,31 @@
           <!-- Deal badge -->
           <div
             *ngIf="product.isDeal"
-            class="absolute top-4 left-0 text-stone-950 text-[10px] font-bold tracking-[0.2em] uppercase px-4 py-1.5 bg-amber-500"
+            class="absolute top-4 left-0 text-white text-[10px] font-bold tracking-[0.2em] uppercase px-4 py-1.5"
+            style="
+              font-family: 'DM Sans', sans-serif;
+              background: linear-gradient(135deg, #ef4444, #f97316);
+              border-radius: 0 4px 4px 0;
+            "
           >
             Deal
           </div>
 
-          <!-- Prev / Next — only when multiple images -->
+          <!-- Prev / Next -->
           <ng-container *ngIf="product.images.length > 1">
             <button
               (click)="prevImage()"
               [disabled]="activeImageIndex === 0"
-              class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center backdrop-blur-sm border text-stone-300 hover:text-amber-400 hover:border-amber-500/60 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200"
+              class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center backdrop-blur-sm disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200"
               style="
-                background-color: rgba(28, 25, 23, 0.75);
-                border-color: #3d3733;
+                background: rgba(255, 255, 255, 0.85);
+                border: 1.5px solid #e2e8f0;
+                border-radius: 6px;
+                color: #64748b;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
               "
+              onmouseover="this.style.borderColor='#3b82f6'; this.style.color='#3b82f6'"
+              onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'"
             >
               <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
                 <path
@@ -105,11 +137,16 @@
             <button
               (click)="nextImage()"
               [disabled]="activeImageIndex === product.images.length - 1"
-              class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center backdrop-blur-sm border text-stone-300 hover:text-amber-400 hover:border-amber-500/60 disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200"
+              class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center backdrop-blur-sm disabled:opacity-20 disabled:cursor-not-allowed transition-all duration-200"
               style="
-                background-color: rgba(28, 25, 23, 0.75);
-                border-color: #3d3733;
+                background: rgba(255, 255, 255, 0.85);
+                border: 1.5px solid #e2e8f0;
+                border-radius: 6px;
+                color: #64748b;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
               "
+              onmouseover="this.style.borderColor='#3b82f6'; this.style.color='#3b82f6'"
+              onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'"
             >
               <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
                 <path
@@ -124,10 +161,15 @@
 
             <!-- Counter -->
             <div
-              class="absolute bottom-4 right-4 backdrop-blur-sm border text-stone-400 text-xs tracking-[0.15em] px-2.5 py-1 font-mono"
+              class="absolute bottom-4 right-4 text-xs tracking-[0.15em] px-2.5 py-1"
               style="
-                background-color: rgba(28, 25, 23, 0.75);
-                border-color: rgba(61, 55, 51, 0.7);
+                font-family: 'DM Sans', sans-serif;
+                background: rgba(255, 255, 255, 0.85);
+                border: 1px solid #e2e8f0;
+                border-radius: 4px;
+                color: #64748b;
+                font-family: monospace;
+                backdrop-filter: blur(4px);
               "
             >
               {{ activeImageIndex + 1 }}/{{ product.images.length }}
@@ -135,7 +177,7 @@
           </ng-container>
         </div>
 
-        <!-- Thumbnail strip — only when multiple images -->
+        <!-- Thumbnail strip -->
         <div
           *ngIf="product.images.length > 1"
           class="flex gap-2 overflow-x-auto pb-1"
@@ -143,13 +185,12 @@
           <button
             *ngFor="let img of product.images; let i = index"
             (click)="activeImageIndex = i"
-            class="shrink-0 w-16 h-16 overflow-hidden border-2 transition-all duration-200"
-            [ngClass]="
-              activeImageIndex === i
-                ? 'border-amber-500 opacity-100'
-                : 'opacity-40 hover:opacity-75'
+            class="shrink-0 w-16 h-16 overflow-hidden transition-all duration-200"
+            [style.border]="
+              activeImageIndex === i ? '2px solid #3b82f6' : '2px solid #e2e8f0'
             "
-            [style.border-color]="activeImageIndex === i ? '' : '#2d2926'"
+            [style.opacity]="activeImageIndex === i ? '1' : '0.5'"
+            style="border-radius: 6px"
           >
             <img
               [src]="img.url"
@@ -164,16 +205,18 @@
       <div class="flex flex-col gap-6 pt-1">
         <!-- Category eyebrow -->
         <div class="flex items-center gap-3">
-          <div class="h-px w-4 bg-amber-500 shrink-0"></div>
-          <span class="text-xs tracking-[0.3em] uppercase text-amber-500">{{
-            categoryName || "Product"
-          }}</span>
+          <div class="h-0.5 w-4 shrink-0" style="background: #3b82f6"></div>
+          <span
+            class="text-xs tracking-[0.3em] uppercase font-bold"
+            style="font-family: 'DM Sans', sans-serif; color: #3b82f6"
+            >{{ categoryName || "Product" }}</span
+          >
         </div>
 
         <!-- Title -->
         <h1
           class="text-3xl md:text-4xl font-normal leading-snug tracking-tight"
-          style="color: #f0ece8"
+          style="color: #0f172a"
         >
           {{ product.name }}
         </h1>
@@ -181,39 +224,55 @@
         <!-- Rating & Status -->
         <div
           class="flex flex-wrap items-center gap-4 pb-5"
-          style="border-bottom: 1px solid #2d2926"
+          style="border-bottom: 1px solid #e2e8f0"
         >
           <div class="flex items-center gap-2">
-            <span class="text-amber-400 text-sm">★</span>
-            <span class="text-sm" style="color: #8a8278">
+            <span style="color: #f59e0b; font-size: 14px">★</span>
+            <span
+              class="text-sm"
+              style="font-family: 'DM Sans', sans-serif; color: #64748b"
+            >
               {{ product.averageRating }}
-              <span class="mx-1" style="color: #3d3733">·</span>
+              <span class="mx-1" style="color: #cbd5e1">·</span>
               {{ product.totalReviews }} reviews
             </span>
           </div>
-          <div class="w-px h-4" style="background-color: #2d2926"></div>
+          <div class="w-px h-4" style="background-color: #e2e8f0"></div>
           <div
             class="flex items-center gap-2 text-[11px] font-bold tracking-[0.15em] uppercase"
-            [class.text-emerald-400]="product.isAvailable"
-            [class.text-red-400]="!product.isAvailable"
+            style="font-family: 'DM Sans', sans-serif"
+            [style.color]="product.isAvailable ? '#10b981' : '#ef4444'"
           >
             <span
               class="w-1.5 h-1.5 rounded-full"
-              [class.bg-emerald-400]="product.isAvailable"
-              [class.bg-red-400]="!product.isAvailable"
+              [style.background]="product.isAvailable ? '#10b981' : '#ef4444'"
             ></span>
             {{ product.isAvailable ? "In Stock" : "Out of Stock" }}
           </div>
           <span
-            class="text-[11px] font-semibold px-2 py-1 border tracking-wide"
-            [ngClass]="{
-              'border-red-500/30 text-red-400 bg-red-500/10':
-                product.stock <= 5,
-              'border-amber-500/30 text-amber-400 bg-amber-500/10':
-                product.stock > 5 && product.stock <= 10,
-              'text-stone-500': product.stock > 10
-            }"
-            [style.border-color]="product.stock > 10 ? '#2d2926' : ''"
+            class="text-[11px] font-semibold px-2.5 py-1 tracking-wide"
+            style="font-family: 'DM Sans', sans-serif; border-radius: 4px"
+            [style.background]="
+              product.stock <= 5
+                ? '#fef2f2'
+                : product.stock <= 10
+                ? '#fff7ed'
+                : '#f8fafc'
+            "
+            [style.color]="
+              product.stock <= 5
+                ? '#ef4444'
+                : product.stock <= 10
+                ? '#f59e0b'
+                : '#94a3b8'
+            "
+            [style.border]="
+              product.stock <= 5
+                ? '1px solid #fecaca'
+                : product.stock <= 10
+                ? '1px solid #fde68a'
+                : '1px solid #e2e8f0'
+            "
           >
             {{ product.stock }} left
           </span>
@@ -221,7 +280,7 @@
 
         <!-- Price -->
         <div class="flex items-baseline gap-4">
-          <p class="text-3xl font-light tracking-tight" style="color: #f0ece8">
+          <p class="text-3xl font-light tracking-tight" style="color: #0f172a">
             ${{ product.discountedPrice || product.price }}
           </p>
           <p
@@ -229,7 +288,7 @@
               product.discountedPrice && product.discountedPrice < product.price
             "
             class="text-lg line-through"
-            style="color: #5a534d"
+            style="color: #cbd5e1"
           >
             ${{ product.price }}
           </p>
@@ -237,7 +296,14 @@
             *ngIf="
               product.discountedPrice && product.discountedPrice < product.price
             "
-            class="text-xs font-bold text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 tracking-[0.1em]"
+            class="text-xs font-bold px-2.5 py-1 tracking-[0.1em]"
+            style="
+              font-family: 'DM Sans', sans-serif;
+              color: #ef4444;
+              background: #fef2f2;
+              border: 1px solid #fecaca;
+              border-radius: 4px;
+            "
           >
             SAVE ${{
               product.price - product.discountedPrice | number : "1.0-0"
@@ -248,7 +314,11 @@
         <!-- Description -->
         <p
           class="text-sm leading-relaxed pl-4"
-          style="color: #8a8278; border-left: 2px solid #2d2926"
+          style="
+            font-family: 'DM Sans', sans-serif;
+            color: #64748b;
+            border-left: 3px solid #3b82f6;
+          "
         >
           {{ product.description }}
         </p>
@@ -259,12 +329,12 @@
           <div *ngIf="hasColors()">
             <label
               class="block text-xs tracking-[0.2em] uppercase mb-3"
-              style="color: #6b6560"
+              style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
             >
               Color —
               <span
                 class="normal-case tracking-normal"
-                style="color: #c4bcb4"
+                style="color: #334155"
                 >{{ selectedColor }}</span
               >
             </label>
@@ -273,13 +343,16 @@
                 *ngFor="let color of product.specs.colors"
                 (click)="selectedColor = color"
                 class="w-8 h-8 border-2 transition-all duration-150 hover:scale-110 focus:outline-none"
-                [class.border-amber-500]="selectedColor === color"
-                [class.ring-1]="selectedColor === color"
-                [class.ring-amber-500]="selectedColor === color"
-                [class.ring-offset-2]="selectedColor === color"
-                [class.border-transparent]="selectedColor !== color"
-                [style.ring-offset-color]="'#1c1917'"
+                [style.border-color]="
+                  selectedColor === color ? '#3b82f6' : '#e2e8f0'
+                "
+                [style.box-shadow]="
+                  selectedColor === color
+                    ? '0 0 0 3px rgba(59,130,246,0.2)'
+                    : 'none'
+                "
                 [style.background-color]="color.toLowerCase()"
+                style="border-radius: 50%"
                 [title]="color"
               ></button>
             </div>
@@ -289,22 +362,26 @@
           <div *ngIf="hasSizes()">
             <label
               class="block text-xs tracking-[0.2em] uppercase mb-3"
-              style="color: #6b6560"
+              style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
               >Size</label
             >
             <div class="flex gap-2 flex-wrap">
               <button
                 *ngFor="let size of product.specs.sizes"
                 (click)="selectedSize = size"
-                class="px-5 py-2 border text-sm tracking-wide transition-all duration-150 focus:outline-none"
-                [class.bg-amber-500]="selectedSize === size"
-                [class.text-stone-950]="selectedSize === size"
-                [class.border-amber-500]="selectedSize === size"
-                [class.text-stone-400]="selectedSize !== size"
-                [style.background-color]="
-                  selectedSize !== size ? 'transparent' : ''
+                class="px-5 py-2 text-sm tracking-wide transition-all duration-150 focus:outline-none font-medium"
+                style="
+                  font-family: 'DM Sans', sans-serif;
+                  border-radius: 6px;
+                  border: 1.5px solid;
                 "
-                [style.border-color]="selectedSize !== size ? '#2d2926' : ''"
+                [style.background]="
+                  selectedSize === size ? '#3b82f6' : '#ffffff'
+                "
+                [style.color]="selectedSize === size ? '#ffffff' : '#475569'"
+                [style.border-color]="
+                  selectedSize === size ? '#3b82f6' : '#e2e8f0'
+                "
               >
                 {{ size }}
               </button>
@@ -315,26 +392,24 @@
           <div>
             <label
               class="block text-xs tracking-[0.2em] uppercase mb-3"
-              style="color: #6b6560"
+              style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
               >Quantity</label
             >
             <div
-              class="inline-flex items-center border"
-              style="border-color: #2d2926; background-color: #252220"
+              class="inline-flex items-center overflow-hidden"
+              style="
+                border: 1.5px solid #e2e8f0;
+                border-radius: 8px;
+                background: #ffffff;
+              "
             >
               <button
                 (click)="decreaseQuantity()"
                 [disabled]="quantity <= 1"
-                class="w-11 h-11 flex items-center justify-center text-lg disabled:opacity-25 disabled:cursor-not-allowed transition-colors focus:outline-none"
-                style="color: #8a8278"
-                (mouseenter)="
-                  $any($event.target).style.backgroundColor = '#2d2926';
-                  $any($event.target).style.color = '#e8e0d8'
-                "
-                (mouseleave)="
-                  $any($event.target).style.backgroundColor = 'transparent';
-                  $any($event.target).style.color = '#8a8278'
-                "
+                class="w-11 h-11 flex items-center justify-center text-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors focus:outline-none"
+                style="color: #64748b"
+                onmouseover="this.style.background='#f1f5f9'; this.style.color='#0f172a'"
+                onmouseout="this.style.background='transparent'; this.style.color='#64748b'"
               >
                 −
               </button>
@@ -345,24 +420,19 @@
                 [max]="product.stock"
                 class="w-14 h-11 text-center text-sm font-semibold bg-transparent focus:outline-none"
                 style="
-                  border-left: 1px solid #2d2926;
-                  border-right: 1px solid #2d2926;
-                  color: #e8e0d8;
+                  font-family: 'DM Sans', sans-serif;
+                  color: #0f172a;
+                  border-left: 1px solid #e2e8f0;
+                  border-right: 1px solid #e2e8f0;
                 "
               />
               <button
                 (click)="increaseQuantity()"
                 [disabled]="quantity >= product.stock"
-                class="w-11 h-11 flex items-center justify-center text-lg disabled:opacity-25 disabled:cursor-not-allowed transition-colors focus:outline-none"
-                style="color: #8a8278"
-                (mouseenter)="
-                  $any($event.target).style.backgroundColor = '#2d2926';
-                  $any($event.target).style.color = '#e8e0d8'
-                "
-                (mouseleave)="
-                  $any($event.target).style.backgroundColor = 'transparent';
-                  $any($event.target).style.color = '#8a8278'
-                "
+                class="w-11 h-11 flex items-center justify-center text-lg disabled:opacity-30 disabled:cursor-not-allowed transition-colors focus:outline-none"
+                style="color: #64748b"
+                onmouseover="this.style.background='#f1f5f9'; this.style.color='#0f172a'"
+                onmouseout="this.style.background='transparent'; this.style.color='#64748b'"
               >
                 +
               </button>
@@ -377,21 +447,22 @@
             [disabled]="
               !product.isAvailable || product.stock === 0 || addingToCart
             "
-            class="flex-1 flex items-center justify-center gap-2.5 text-stone-950 text-xs font-bold tracking-[0.2em] uppercase py-4 transition-all duration-200 focus:outline-none disabled:cursor-not-allowed"
-            [style.background-color]="
+            class="flex-1 flex items-center justify-center gap-2.5 text-xs font-bold tracking-[0.2em] uppercase py-4 transition-all duration-200 focus:outline-none disabled:cursor-not-allowed hover:shadow-lg hover:-translate-y-0.5"
+            style="font-family: 'DM Sans', sans-serif; border-radius: 8px"
+            [style.background]="
               !product.isAvailable || product.stock === 0 || addingToCart
-                ? '#2d2926'
-                : '#f59e0b'
+                ? '#e2e8f0'
+                : 'linear-gradient(135deg, #3b82f6, #0f766e)'
             "
             [style.color]="
               !product.isAvailable || product.stock === 0 || addingToCart
-                ? '#5a534d'
-                : '#1c1917'
+                ? '#94a3b8'
+                : '#ffffff'
             "
           >
             <span
               *ngIf="addingToCart"
-              class="w-4 h-4 border-2 border-stone-600 border-t-stone-950 rounded-full animate-spin"
+              class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"
             ></span>
             <svg
               *ngIf="!addingToCart"
@@ -408,20 +479,15 @@
             {{ addingToCart ? "Adding…" : "Add to Cart" }}
           </button>
           <button
-            class="flex items-center justify-center border px-4 transition-all duration-200 focus:outline-none"
-            style="border-color: #2d2926; color: #6b6560"
-            (mouseenter)="
-              $any($event.currentTarget).style.borderColor =
-                'rgba(239,68,68,0.4)';
-              $any($event.currentTarget).style.backgroundColor =
-                'rgba(239,68,68,0.08)';
-              $any($event.currentTarget).style.color = '#f87171'
+            class="flex items-center justify-center px-4 transition-all duration-200 focus:outline-none"
+            style="
+              border: 1.5px solid #e2e8f0;
+              border-radius: 8px;
+              color: #94a3b8;
+              background: #ffffff;
             "
-            (mouseleave)="
-              $any($event.currentTarget).style.borderColor = '#2d2926';
-              $any($event.currentTarget).style.backgroundColor = 'transparent';
-              $any($event.currentTarget).style.color = '#6b6560'
-            "
+            onmouseover="this.style.borderColor='#fecaca'; this.style.background='#fef2f2'; this.style.color='#ef4444'"
+            onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#ffffff'; this.style.color='#94a3b8'"
           >
             <svg
               class="w-5 h-5"
@@ -442,11 +508,16 @@
         <!-- Trust badges -->
         <div
           class="flex flex-wrap items-center gap-5 py-4 text-xs"
-          style="border-top: 1px solid #2d2926; color: #6b6560"
+          style="
+            font-family: 'DM Sans', sans-serif;
+            border-top: 1px solid #f1f5f9;
+            color: #94a3b8;
+          "
         >
           <div class="flex items-center gap-1.5">
             <svg
-              class="w-3.5 h-3.5 shrink-0 text-amber-500/50"
+              class="w-3.5 h-3.5 shrink-0"
+              style="color: #3b82f6"
               fill="none"
               stroke="currentColor"
               stroke-width="1.5"
@@ -462,7 +533,8 @@
           </div>
           <div class="flex items-center gap-1.5">
             <svg
-              class="w-3.5 h-3.5 shrink-0 text-amber-500/50"
+              class="w-3.5 h-3.5 shrink-0"
+              style="color: #0f766e"
               fill="none"
               stroke="currentColor"
               stroke-width="1.5"
@@ -478,7 +550,8 @@
           </div>
           <div class="flex items-center gap-1.5">
             <svg
-              class="w-3.5 h-3.5 shrink-0 text-amber-500/50"
+              class="w-3.5 h-3.5 shrink-0"
+              style="color: #f59e0b"
               fill="none"
               stroke="currentColor"
               stroke-width="1.5"
@@ -495,15 +568,22 @@
         </div>
 
         <!-- Specifications -->
-        <div class="overflow-hidden" style="border: 1px solid #2d2926">
+        <div
+          style="
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #ffffff;
+          "
+        >
           <div
-            class="px-5 py-3.5 flex items-center gap-3"
-            style="background-color: #252220"
+            class="px-5 py-4 flex items-center gap-3"
+            style="background: #f8fafc; border-bottom: 1px solid #e2e8f0"
           >
-            <div class="h-px w-4 bg-amber-500 shrink-0"></div>
+            <div class="h-0.5 w-4 shrink-0" style="background: #3b82f6"></div>
             <h3
               class="text-xs font-bold tracking-[0.2em] uppercase"
-              style="color: #6b6560"
+              style="font-family: 'DM Sans', sans-serif; color: #64748b"
             >
               Specifications
             </h3>
@@ -511,44 +591,36 @@
           <div>
             <div
               class="flex justify-between items-center px-5 py-3.5 transition-colors"
-              style="border-bottom: 1px solid #2d2926"
-              (mouseenter)="
-                $any($event.currentTarget).style.backgroundColor =
-                  'rgba(37,34,32,0.5)'
-              "
-              (mouseleave)="
-                $any($event.currentTarget).style.backgroundColor = 'transparent'
-              "
+              style="border-bottom: 1px solid #f1f5f9"
+              onmouseover="this.style.background='#f8fafc'"
+              onmouseout="this.style.background='transparent'"
             >
               <span
                 class="text-xs tracking-[0.1em] uppercase"
-                style="color: #6b6560"
+                style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
                 >Category</span
               >
-              <span class="text-sm" style="color: #c4bcb4">{{
-                categoryName || "N/A"
-              }}</span>
+              <span
+                class="text-sm"
+                style="font-family: 'DM Sans', sans-serif; color: #334155"
+                >{{ categoryName || "N/A" }}</span
+              >
             </div>
             <div
               *ngFor="let field of categorySpec?.specField"
               class="flex justify-between items-center px-5 py-3.5 transition-colors"
-              style="border-bottom: 1px solid #2d2926"
-              (mouseenter)="
-                $any($event.currentTarget).style.backgroundColor =
-                  'rgba(37,34,32,0.5)'
-              "
-              (mouseleave)="
-                $any($event.currentTarget).style.backgroundColor = 'transparent'
-              "
+              style="border-bottom: 1px solid #f1f5f9"
+              onmouseover="this.style.background='#f8fafc'"
+              onmouseout="this.style.background='transparent'"
             >
               <span
                 class="text-xs tracking-[0.1em] uppercase"
-                style="color: #6b6560"
+                style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
                 >{{ field.label }}</span
               >
               <span
                 class="text-sm text-right max-w-[55%]"
-                style="color: #c4bcb4"
+                style="font-family: 'DM Sans', sans-serif; color: #334155"
               >
                 <ng-container *ngIf="field.type === 'Array'">
                   <span *ngIf="getSpecValue(field.key) as val; else naVal">{{
@@ -568,7 +640,7 @@
                   }}</span>
                 </ng-container>
                 <ng-template #naVal
-                  ><span class="italic text-xs" style="color: #3d3733"
+                  ><span class="italic text-xs" style="color: #cbd5e1"
                     >N/A</span
                   ></ng-template
                 >
@@ -580,26 +652,27 @@
     </div>
 
     <!-- ── REVIEWS ── -->
-    <div class="mt-20 pt-10" style="border-top: 1px solid #2d2926">
+    <div class="mt-20 pt-10" style="border-top: 1px solid #e2e8f0">
       <div class="flex items-center gap-3 mb-2">
-        <div class="h-px w-4 bg-amber-500 shrink-0"></div>
-        <span class="text-xs tracking-[0.3em] uppercase text-amber-500"
+        <div class="h-0.5 w-4 shrink-0" style="background: #f59e0b"></div>
+        <span
+          class="text-xs tracking-[0.3em] uppercase font-bold"
+          style="font-family: 'DM Sans', sans-serif; color: #f59e0b"
           >What customers say</span
         >
       </div>
       <div class="flex items-end justify-between mb-8">
-        <h3 class="text-3xl font-normal tracking-tight" style="color: #f0ece8">
+        <h3 class="text-3xl font-normal tracking-tight" style="color: #0f172a">
           Customer Reviews
         </h3>
-        <div
-          class="flex items-center gap-2 shrink-0 ml-4"
-          style="color: #8a8278"
-        >
-          <span class="text-2xl text-amber-400">★</span>
-          <span class="text-lg font-light" style="color: #e8e0d8">{{
+        <div class="flex items-center gap-2 shrink-0 ml-4">
+          <span style="color: #f59e0b; font-size: 24px">★</span>
+          <span class="text-lg font-light" style="color: #0f172a">{{
             product.averageRating
           }}</span>
-          <span class="text-sm" style="color: #3d3733"
+          <span
+            class="text-sm"
+            style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
             >({{ product.totalReviews }})</span
           >
         </div>
@@ -612,13 +685,11 @@
       >
         <div
           *ngFor="let review of reviews"
-          class="p-5 transition-colors duration-200"
-          style="background-color: #252220; border: 1px solid #2d2926"
-          (mouseenter)="
-            $any($event.currentTarget).style.backgroundColor = '#2a2724'
-          "
-          (mouseleave)="
-            $any($event.currentTarget).style.backgroundColor = '#252220'
+          class="p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+          style="
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 8px;
           "
         >
           <div class="flex items-start justify-between mb-4">
@@ -626,34 +697,42 @@
               <div
                 class="w-9 h-9 flex items-center justify-center shrink-0"
                 style="
-                  background-color: rgba(245, 158, 11, 0.1);
-                  border: 1px solid rgba(245, 158, 11, 0.2);
+                  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+                  border: 1.5px solid #bfdbfe;
+                  border-radius: 50%;
                 "
               >
-                <span class="text-amber-400 font-semibold text-sm">{{
+                <span class="font-bold text-sm" style="color: #3b82f6">{{
                   review.user.name.charAt(0).toUpperCase()
                 }}</span>
               </div>
               <div>
-                <p class="text-sm font-medium" style="color: #e8e0d8">
+                <p
+                  class="text-sm font-semibold"
+                  style="font-family: 'DM Sans', sans-serif; color: #1e293b"
+                >
                   {{ review.user.name }}
                 </p>
                 <div class="flex items-center gap-0.5 mt-0.5">
                   <span
                     *ngFor="let s of [1, 2, 3, 4, 5]"
                     class="text-xs"
-                    [class.text-amber-400]="s <= review.rating"
-                    [style.color]="s > review.rating ? '#2d2926' : ''"
+                    [style.color]="s <= review.rating ? '#f59e0b' : '#e2e8f0'"
                     >★</span
                   >
                 </div>
               </div>
             </div>
-            <span class="text-xs shrink-0 ml-2" style="color: #3d3733">{{
-              review.createdAt | date : "mediumDate"
-            }}</span>
+            <span
+              class="text-xs shrink-0 ml-2"
+              style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+              >{{ review.createdAt | date : "mediumDate" }}</span
+            >
           </div>
-          <p class="text-sm leading-relaxed" style="color: #8a8278">
+          <p
+            class="text-sm leading-relaxed"
+            style="font-family: 'DM Sans', sans-serif; color: #64748b"
+          >
             {{ review.comment }}
           </p>
         </div>
@@ -662,11 +741,20 @@
       <ng-template #noReviews>
         <div
           class="flex flex-col items-center justify-center py-14 mb-10 text-center"
-          style="border: 1px solid #2d2926"
+          style="
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #ffffff;
+          "
         >
           <div
             class="w-10 h-10 flex items-center justify-center mb-4"
-            style="border: 1px solid #2d2926; color: #3d3733"
+            style="
+              background: #eff6ff;
+              border: 1.5px solid #bfdbfe;
+              border-radius: 50%;
+              color: #3b82f6;
+            "
           >
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none">
               <path
@@ -678,7 +766,10 @@
               />
             </svg>
           </div>
-          <p class="text-sm italic" style="color: #5a534d">
+          <p
+            class="text-sm italic"
+            style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+          >
             No reviews yet — be the first to share your thoughts.
           </p>
         </div>
@@ -687,26 +778,31 @@
       <!-- Write review -->
       <div
         *ngIf="isLoggedIn && !hasUserReviewed"
-        style="border: 1px solid #2d2926"
+        style="
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          overflow: hidden;
+          background: #ffffff;
+        "
       >
         <div
           class="px-6 py-4 flex items-center gap-3"
-          style="border-bottom: 1px solid #2d2926; background-color: #252220"
+          style="border-bottom: 1px solid #e2e8f0; background: #f8fafc"
         >
-          <div class="h-px w-4 bg-amber-500 shrink-0"></div>
+          <div class="h-0.5 w-4 shrink-0" style="background: #3b82f6"></div>
           <h3
             class="text-xs font-bold tracking-[0.2em] uppercase"
-            style="color: #6b6560"
+            style="font-family: 'DM Sans', sans-serif; color: #64748b"
           >
             Write a Review
           </h3>
         </div>
-        <div class="px-6 py-7" style="background-color: #1c1917">
+        <div class="px-6 py-7">
           <form (ngSubmit)="submitReview()" class="flex flex-col gap-6">
             <div>
               <label
                 class="block text-xs tracking-[0.2em] uppercase mb-3"
-                style="color: #6b6560"
+                style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
                 >Your Rating</label
               >
               <div class="flex gap-1">
@@ -715,8 +811,7 @@
                   type="button"
                   (click)="selectedRating = star"
                   class="text-3xl transition-transform duration-100 hover:scale-110 focus:outline-none leading-none"
-                  [class.text-amber-400]="selectedRating >= star"
-                  [style.color]="selectedRating < star ? '#2d2926' : ''"
+                  [style.color]="selectedRating >= star ? '#f59e0b' : '#e2e8f0'"
                 >
                   ★
                 </button>
@@ -725,7 +820,7 @@
             <div>
               <label
                 class="block text-xs tracking-[0.2em] uppercase mb-3"
-                style="color: #6b6560"
+                style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
                 >Your Review</label
               >
               <textarea
@@ -733,16 +828,16 @@
                 name="reviewComment"
                 rows="5"
                 placeholder="Share your experience with this product…"
-                class="w-full text-sm leading-relaxed resize-none transition-colors duration-200 outline-none px-5 py-4"
+                class="w-full text-sm leading-relaxed resize-none outline-none px-5 py-4 transition-all duration-200"
                 style="
-                  background-color: #252220;
-                  border: 1px solid #2d2926;
-                  color: #c4bcb4;
+                  font-family: 'DM Sans', sans-serif;
+                  background: #f8fafc;
+                  border: 1.5px solid #e2e8f0;
+                  border-radius: 8px;
+                  color: #334155;
                 "
-                (focus)="
-                  $any($event.target).style.borderColor = 'rgba(245,158,11,0.5)'
-                "
-                (blur)="$any($event.target).style.borderColor = '#2d2926'"
+                onfocus="this.style.borderColor='#3b82f6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'"
+                onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
                 required
               ></textarea>
             </div>
@@ -752,21 +847,22 @@
                 [disabled]="
                   !selectedRating || !reviewComment || submittingReview
                 "
-                class="flex items-center gap-2.5 text-stone-950 text-xs font-bold tracking-[0.2em] uppercase px-8 py-3.5 transition-all duration-200 focus:outline-none disabled:cursor-not-allowed"
-                [style.background-color]="
+                class="flex items-center gap-2.5 text-xs font-bold tracking-[0.2em] uppercase px-8 py-3.5 transition-all duration-200 focus:outline-none disabled:cursor-not-allowed hover:shadow-md hover:-translate-y-0.5"
+                style="font-family: 'DM Sans', sans-serif; border-radius: 8px"
+                [style.background]="
                   !selectedRating || !reviewComment || submittingReview
-                    ? '#2d2926'
-                    : '#f59e0b'
+                    ? '#e2e8f0'
+                    : 'linear-gradient(135deg, #3b82f6, #0f766e)'
                 "
                 [style.color]="
                   !selectedRating || !reviewComment || submittingReview
-                    ? '#5a534d'
-                    : '#1c1917'
+                    ? '#94a3b8'
+                    : '#ffffff'
                 "
               >
                 <span
                   *ngIf="submittingReview"
-                  class="w-4 h-4 border-2 border-stone-600 border-t-stone-900 rounded-full animate-spin"
+                  class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"
                 ></span>
                 {{ submittingReview ? "Submitting…" : "Submit Review" }}
               </button>
@@ -780,12 +876,16 @@
         *ngIf="isLoggedIn && hasUserReviewed"
         class="px-6 py-5 flex items-center gap-3"
         style="
-          border: 1px solid rgba(245, 158, 11, 0.2);
-          background-color: rgba(245, 158, 11, 0.05);
+          border: 1.5px solid #bbf7d0;
+          background: #f0fdf4;
+          border-radius: 8px;
         "
       >
-        <span class="text-amber-400">✓</span>
-        <p class="text-sm" style="color: rgba(251, 191, 36, 0.75)">
+        <span style="color: #10b981; font-size: 18px">✓</span>
+        <p
+          class="text-sm"
+          style="font-family: 'DM Sans', sans-serif; color: #059669"
+        >
           You have already reviewed this product.
         </p>
       </div>
@@ -794,14 +894,23 @@
       <div
         *ngIf="!isLoggedIn"
         class="px-6 py-8 text-center"
-        style="border: 1px solid #2d2926"
+        style="
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          background: #ffffff;
+        "
       >
-        <p class="text-sm" style="color: #6b6560">
+        <p
+          class="text-sm"
+          style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+        >
           Please
           <a
             routerLink="/auth/login"
-            class="text-amber-400 hover:text-amber-300 transition-colors"
-            style="border-bottom: 1px solid rgba(251, 191, 36, 0.4)"
+            style="color: #3b82f6; border-bottom: 1px solid #bfdbfe"
+            onmouseover="this.style.color='#2563eb'"
+            onmouseout="this.style.color='#3b82f6'"
+            class="transition-colors"
             >log in</a
           >
           to write a review.
@@ -815,11 +924,11 @@
 <div
   *ngIf="loading"
   class="min-h-screen flex items-center justify-center"
-  style="background-color: #1c1917"
+  style="background: #f8fafc"
 >
   <div
     class="w-10 h-10 rounded-full animate-spin"
-    style="border: 1px solid #2d2926; border-top-color: #f59e0b"
+    style="border: 2px solid #e2e8f0; border-top-color: #3b82f6"
   ></div>
 </div>
 
@@ -827,12 +936,17 @@
 <div
   *ngIf="error && !loading"
   class="min-h-screen flex items-center justify-center"
-  style="background-color: #1c1917"
+  style="background: #f8fafc"
 >
   <div class="text-center max-w-sm px-6">
     <div
       class="w-16 h-16 flex items-center justify-center mb-8 mx-auto"
-      style="border: 1px solid #2d2926; color: #3d3733"
+      style="
+        background: #eff6ff;
+        border: 1.5px solid #bfdbfe;
+        border-radius: 50%;
+        color: #3b82f6;
+      "
     >
       <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none">
         <path
@@ -844,30 +958,25 @@
         />
       </svg>
     </div>
-    <h2 class="text-2xl font-normal mb-3 tracking-tight" style="color: #c4bcb4">
+    <h2 class="text-2xl font-normal mb-3 tracking-tight" style="color: #0f172a">
       Product Not Found
     </h2>
-    <p class="text-sm mb-10 leading-relaxed" style="color: #5a534d">
+    <p
+      class="text-sm mb-10 leading-relaxed"
+      style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+    >
       The product you're looking for doesn't exist or may have been removed.
     </p>
     <a
       routerLink="/products"
-      class="inline-flex items-center gap-2 text-stone-950 text-xs font-bold tracking-[0.2em] uppercase py-3.5 px-8 bg-amber-500 hover:bg-amber-400 transition-all duration-200"
+      class="inline-flex items-center gap-2 text-white text-xs font-bold tracking-[0.2em] uppercase py-3.5 px-8 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
+      style="
+        font-family: 'DM Sans', sans-serif;
+        background: linear-gradient(135deg, #3b82f6, #0f766e);
+        border-radius: 8px;
+      "
     >
       Browse Products
     </a>
   </div>
 </div>
-
-<!--
-  ── ADD TO COMPONENT CLASS ───────────────────────────────────────────────────
-  activeImageIndex = 0;
-
-  prevImage() {
-    if (this.activeImageIndex > 0) this.activeImageIndex--;
-  }
-
-  nextImage() {
-    if (this.activeImageIndex < this.product.images.length - 1) this.activeImageIndex++;
-  }
--->

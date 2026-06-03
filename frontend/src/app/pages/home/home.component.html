@@ -1,45 +1,80 @@
 <div
-  class="min-h-screen bg-stone-950 text-stone-100"
-  style="font-family: 'Georgia', 'Times New Roman', serif"
+  class="min-h-screen bg-slate-50 text-slate-900"
+  style="font-family: 'Playfair Display', 'Georgia', serif"
 >
   <!-- ── HERO ── -->
   <section
-    class="relative min-h-screen flex flex-col justify-end overflow-hidden bg-stone-950"
+    class="relative min-h-screen flex flex-col justify-end overflow-hidden"
+    style="
+      background: linear-gradient(
+        135deg,
+        #f8f4ef 0%,
+        #eef4fb 50%,
+        #f0f7f4 100%
+      );
+    "
   >
-    <!-- Ambient background circles -->
+    <!-- Decorative background shapes -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
       <div
-        class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-amber-500/5 blur-3xl"
+        class="absolute -top-32 -right-32 w-[700px] h-[700px] rounded-full opacity-30"
+        style="background: radial-gradient(circle, #3b82f6 0%, transparent 70%)"
       ></div>
       <div
-        class="absolute top-1/2 -left-60 w-[500px] h-[500px] rounded-full bg-amber-400/4 blur-3xl"
+        class="absolute top-1/3 -left-48 w-[500px] h-[500px] rounded-full opacity-20"
+        style="background: radial-gradient(circle, #f59e0b 0%, transparent 70%)"
       ></div>
       <div
-        class="absolute bottom-0 right-1/3 w-[400px] h-[400px] rounded-full bg-stone-700/30 blur-3xl"
+        class="absolute bottom-0 right-0 w-[600px] h-[400px] opacity-15"
+        style="
+          background: radial-gradient(
+            ellipse at bottom right,
+            #0f766e 0%,
+            transparent 70%
+          );
+        "
+      ></div>
+      <!-- Subtle grid pattern -->
+      <div
+        class="absolute inset-0 opacity-[0.03]"
+        style="
+          background-image: linear-gradient(#1e293b 1px, transparent 1px),
+            linear-gradient(90deg, #1e293b 1px, transparent 1px);
+          background-size: 60px 60px;
+        "
       ></div>
     </div>
 
-    <!-- Thin top rule -->
+    <!-- Top accent line -->
     <div
-      class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent"
+      class="absolute top-0 left-0 right-0 h-1"
+      style="background: linear-gradient(90deg, #3b82f6, #0f766e, #f59e0b)"
     ></div>
 
     <!-- Nav strip -->
     <div
       class="absolute top-0 left-0 right-0 flex items-center justify-between px-8 py-6 z-10"
     >
-      <span class="text-xs tracking-[0.3em] uppercase text-stone-400"
+      <span
+        class="text-xs tracking-[0.3em] uppercase font-semibold"
+        style="color: #0f766e; font-family: 'DM Sans', sans-serif"
         >Est. 2024</span
       >
       <div class="flex items-center gap-8">
         <a
           routerLink="/products"
-          class="text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-amber-400 transition-colors duration-300"
+          class="text-xs tracking-[0.2em] uppercase transition-colors duration-300"
+          style="font-family: 'DM Sans', sans-serif; color: #475569"
+          onmouseover="this.style.color='#3b82f6'"
+          onmouseout="this.style.color='#475569'"
           >Shop</a
         >
         <a
           routerLink="/categories"
-          class="text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-amber-400 transition-colors duration-300"
+          class="text-xs tracking-[0.2em] uppercase transition-colors duration-300"
+          style="font-family: 'DM Sans', sans-serif; color: #475569"
+          onmouseover="this.style.color='#3b82f6'"
+          onmouseout="this.style.color='#475569'"
           >Categories</a
         >
       </div>
@@ -53,26 +88,38 @@
         <!-- Left: Text -->
         <div>
           <div class="flex items-center gap-3 mb-8">
-            <div class="h-px w-10 bg-amber-500"></div>
-            <span class="text-xs tracking-[0.3em] uppercase text-amber-500"
+            <div class="h-0.5 w-10" style="background: #f59e0b"></div>
+            <span
+              class="text-xs tracking-[0.3em] uppercase font-bold"
+              style="font-family: 'DM Sans', sans-serif; color: #f59e0b"
               >New Season</span
             >
           </div>
           <h1
-            class="text-6xl md:text-8xl font-normal leading-[0.95] tracking-tight text-stone-50 mb-8"
+            class="text-6xl md:text-8xl font-normal leading-[0.95] tracking-tight mb-8"
+            style="color: #0f172a"
           >
             Discover<br />
-            <em class="text-amber-400 not-italic">Amazing</em><br />
+            <em class="not-italic" style="color: #3b82f6">Amazing</em><br />
             Products
           </h1>
-          <p class="text-stone-400 text-lg leading-relaxed max-w-sm mb-12">
+          <p
+            class="text-lg leading-relaxed max-w-sm mb-12"
+            style="font-family: 'DM Sans', sans-serif; color: #64748b"
+          >
             Thousands of curated products. Unbeatable prices. Delivered to your
             door.
           </p>
           <div class="flex items-center gap-6">
             <a
               routerLink="/products"
-              class="group inline-flex items-center gap-3 bg-amber-500 hover:bg-amber-400 text-stone-950 text-sm font-semibold tracking-[0.15em] uppercase px-8 py-4 transition-all duration-300"
+              class="group inline-flex items-center gap-3 text-sm font-bold tracking-[0.15em] uppercase px-8 py-4 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+              style="
+                font-family: 'DM Sans', sans-serif;
+                background: linear-gradient(135deg, #3b82f6, #0f766e);
+                color: #ffffff;
+                border-radius: 2px;
+              "
             >
               Shop Now
               <svg
@@ -91,7 +138,14 @@
             </a>
             <a
               routerLink="/categories"
-              class="text-sm tracking-[0.15em] uppercase text-stone-400 hover:text-stone-100 transition-colors duration-300 border-b border-stone-700 hover:border-stone-400 pb-0.5"
+              class="text-sm tracking-[0.15em] uppercase transition-colors duration-300 pb-0.5"
+              style="
+                font-family: 'DM Sans', sans-serif;
+                color: #475569;
+                border-bottom: 1px solid #cbd5e1;
+              "
+              onmouseover="this.style.color='#3b82f6'; this.style.borderBottomColor='#3b82f6'"
+              onmouseout="this.style.color='#475569'; this.style.borderBottomColor='#cbd5e1'"
             >
               Browse Categories
             </a>
@@ -101,29 +155,51 @@
         <!-- Right: Stats -->
         <div class="lg:text-right">
           <div
-            class="inline-grid grid-cols-2 gap-px bg-stone-800/60 border border-stone-800"
+            class="inline-grid grid-cols-2 gap-px shadow-2xl"
+            style="
+              background: #e2e8f0;
+              border: 1px solid #e2e8f0;
+              border-radius: 4px;
+              overflow: hidden;
+            "
           >
-            <div class="bg-stone-950 px-8 py-6">
-              <p class="text-3xl font-light text-stone-100 mb-1">10K+</p>
-              <p class="text-xs tracking-[0.2em] uppercase text-stone-500">
+            <div class="px-8 py-6" style="background: #ffffff">
+              <p class="text-3xl font-light mb-1" style="color: #0f172a">
+                10K+
+              </p>
+              <p
+                class="text-xs tracking-[0.2em] uppercase"
+                style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+              >
                 Products
               </p>
             </div>
-            <div class="bg-stone-950 px-8 py-6">
-              <p class="text-3xl font-light text-stone-100 mb-1">50+</p>
-              <p class="text-xs tracking-[0.2em] uppercase text-stone-500">
+            <div class="px-8 py-6" style="background: #ffffff">
+              <p class="text-3xl font-light mb-1" style="color: #0f172a">50+</p>
+              <p
+                class="text-xs tracking-[0.2em] uppercase"
+                style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+              >
                 Categories
               </p>
             </div>
-            <div class="bg-stone-950 px-8 py-6">
-              <p class="text-3xl font-light text-stone-100 mb-1">4.9★</p>
-              <p class="text-xs tracking-[0.2em] uppercase text-stone-500">
+            <div class="px-8 py-6" style="background: #ffffff">
+              <p class="text-3xl font-light mb-1" style="color: #f59e0b">
+                4.9★
+              </p>
+              <p
+                class="text-xs tracking-[0.2em] uppercase"
+                style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+              >
                 Avg Rating
               </p>
             </div>
-            <div class="bg-stone-950 px-8 py-6">
-              <p class="text-3xl font-light text-stone-100 mb-1">24h</p>
-              <p class="text-xs tracking-[0.2em] uppercase text-stone-500">
+            <div class="px-8 py-6" style="background: #ffffff">
+              <p class="text-3xl font-light mb-1" style="color: #0f172a">24h</p>
+              <p
+                class="text-xs tracking-[0.2em] uppercase"
+                style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+              >
                 Fast Delivery
               </p>
             </div>
@@ -134,31 +210,44 @@
 
     <!-- Bottom rule -->
     <div
-      class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-stone-700 to-transparent"
+      class="absolute bottom-0 left-0 right-0 h-px"
+      style="
+        background: linear-gradient(90deg, transparent, #cbd5e1, transparent);
+      "
     ></div>
   </section>
 
   <!-- ── CATEGORIES ── -->
-  <section class="py-24 bg-stone-950">
+  <section class="py-24" style="background: #ffffff">
     <div class="max-w-7xl mx-auto px-8 md:px-16">
       <!-- Section header -->
       <div class="flex items-end justify-between mb-14">
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <div class="h-px w-6 bg-amber-500"></div>
-            <span class="text-xs tracking-[0.3em] uppercase text-amber-500"
+            <div class="h-0.5 w-6" style="background: #f59e0b"></div>
+            <span
+              class="text-xs tracking-[0.3em] uppercase font-bold"
+              style="font-family: 'DM Sans', sans-serif; color: #f59e0b"
               >Explore</span
             >
           </div>
           <h2
-            class="text-4xl md:text-5xl font-normal text-stone-100 tracking-tight"
+            class="text-4xl md:text-5xl font-normal tracking-tight"
+            style="color: #0f172a"
           >
             Shop by Category
           </h2>
         </div>
         <a
           routerLink="/categories"
-          class="hidden md:inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-amber-400 transition-colors border-b border-transparent hover:border-amber-400 pb-0.5"
+          class="hidden md:inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase transition-colors pb-0.5"
+          style="
+            font-family: 'DM Sans', sans-serif;
+            color: #64748b;
+            border-bottom: 1px solid transparent;
+          "
+          onmouseover="this.style.color='#3b82f6'; this.style.borderBottomColor='#3b82f6'"
+          onmouseout="this.style.color='#64748b'; this.style.borderBottomColor='transparent'"
         >
           All Categories
           <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none">
@@ -187,34 +276,48 @@
             >
               <!-- Image -->
               <div
-                class="aspect-[3/4] overflow-hidden bg-stone-900 mb-4 relative"
+                class="aspect-[3/4] overflow-hidden mb-4 relative"
+                style="background: #f1f5f9; border-radius: 4px"
               >
                 <img
                   [src]="category.image"
                   [alt]="category.name"
-                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  style="opacity: 0.92"
                 />
                 <!-- Overlay -->
                 <div
-                  class="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent"
+                  class="absolute inset-0"
+                  style="
+                    background: linear-gradient(
+                      to top,
+                      rgba(15, 23, 42, 0.5) 0%,
+                      transparent 60%
+                    );
+                  "
                 ></div>
-                <!-- Corner accent -->
+                <!-- Corner accents on hover -->
                 <div
-                  class="absolute top-3 right-3 w-6 h-6 border-t border-r border-amber-500/0 group-hover:border-amber-500/80 transition-all duration-500"
-                ></div>
-                <div
-                  class="absolute bottom-3 left-3 w-6 h-6 border-b border-l border-amber-500/0 group-hover:border-amber-500/80 transition-all duration-500"
+                  class="absolute top-3 right-3 w-6 h-6 transition-all duration-500"
+                  style="
+                    border-top: 2px solid transparent;
+                    border-right: 2px solid transparent;
+                  "
+                  [style.borderTopColor]="'rgba(59,130,246,0)'"
                 ></div>
               </div>
               <!-- Label -->
               <div class="flex items-center justify-between">
                 <h3
-                  class="text-sm tracking-[0.15em] uppercase text-stone-300 group-hover:text-amber-400 transition-colors duration-300"
+                  class="text-sm tracking-[0.15em] uppercase transition-colors duration-300"
+                  style="font-family: 'DM Sans', sans-serif; color: #334155"
+                  [style.color]="''"
                 >
                   {{ category.name }}
                 </h3>
                 <svg
-                  class="w-3.5 h-3.5 text-stone-600 group-hover:text-amber-400 group-hover:translate-x-1 transition-all duration-300"
+                  class="w-3.5 h-3.5 transition-all duration-300 group-hover:translate-x-1"
+                  style="color: #94a3b8"
                   viewBox="0 0 16 16"
                   fill="none"
                 >
@@ -236,7 +339,14 @@
           <button
             (click)="prevSlide()"
             aria-label="Previous slide"
-            class="w-10 h-10 border border-stone-700 hover:border-amber-500 flex items-center justify-center text-stone-400 hover:text-amber-400 transition-all duration-200"
+            class="w-10 h-10 flex items-center justify-center transition-all duration-200"
+            style="
+              border: 1.5px solid #e2e8f0;
+              color: #64748b;
+              background: white;
+            "
+            onmouseover="this.style.borderColor='#3b82f6'; this.style.color='#3b82f6'; this.style.background='#eff6ff'"
+            onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'; this.style.background='white'"
           >
             <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
               <path
@@ -251,7 +361,14 @@
           <button
             (click)="nextSlide()"
             aria-label="Next slide"
-            class="w-10 h-10 border border-stone-700 hover:border-amber-500 flex items-center justify-center text-stone-400 hover:text-amber-400 transition-all duration-200"
+            class="w-10 h-10 flex items-center justify-center transition-all duration-200"
+            style="
+              border: 1.5px solid #e2e8f0;
+              color: #64748b;
+              background: white;
+            "
+            onmouseover="this.style.borderColor='#3b82f6'; this.style.color='#3b82f6'; this.style.background='#eff6ff'"
+            onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'; this.style.background='white'"
           >
             <svg class="w-4 h-4" viewBox="0 0 16 16" fill="none">
               <path
@@ -271,30 +388,43 @@
   <!-- Thin divider -->
   <div class="max-w-7xl mx-auto px-8 md:px-16">
     <div
-      class="h-px bg-gradient-to-r from-transparent via-stone-800 to-transparent"
+      class="h-px"
+      style="
+        background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+      "
     ></div>
   </div>
 
   <!-- ── FEATURED PRODUCTS ── -->
-  <section class="py-24 bg-stone-950">
+  <section class="py-24" style="background: #f8fafc">
     <div class="max-w-7xl mx-auto px-8 md:px-16">
       <div class="flex items-end justify-between mb-14">
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <div class="h-px w-6 bg-amber-500"></div>
-            <span class="text-xs tracking-[0.3em] uppercase text-amber-500"
+            <div class="h-0.5 w-6" style="background: #3b82f6"></div>
+            <span
+              class="text-xs tracking-[0.3em] uppercase font-bold"
+              style="font-family: 'DM Sans', sans-serif; color: #3b82f6"
               >Curated</span
             >
           </div>
           <h2
-            class="text-4xl md:text-5xl font-normal text-stone-100 tracking-tight"
+            class="text-4xl md:text-5xl font-normal tracking-tight"
+            style="color: #0f172a"
           >
             Featured Products
           </h2>
         </div>
         <a
           routerLink="/products"
-          class="hidden md:inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-amber-400 transition-colors border-b border-transparent hover:border-amber-400 pb-0.5"
+          class="hidden md:inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase transition-colors pb-0.5"
+          style="
+            font-family: 'DM Sans', sans-serif;
+            color: #64748b;
+            border-bottom: 1px solid transparent;
+          "
+          onmouseover="this.style.color='#3b82f6'; this.style.borderBottomColor='#3b82f6'"
+          onmouseout="this.style.color='#64748b'; this.style.borderBottomColor='transparent'"
         >
           View All
           <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none">
@@ -311,36 +441,59 @@
 
       <div
         *ngIf="featuredProducts.length > 0"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-stone-800/40"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
       >
         <div
           *ngFor="let product of featuredProducts; let i = index"
-          class="group bg-stone-950 cursor-pointer p-0 flex flex-col hover:bg-stone-900/60 transition-colors duration-300"
+          class="group cursor-pointer flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+          style="
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+          "
           (click)="navigateToProduct(product._id)"
         >
           <!-- Image -->
-          <div class="aspect-square overflow-hidden relative bg-stone-900">
+          <div
+            class="aspect-square overflow-hidden relative"
+            style="background: #f8fafc"
+          >
             <img
               [src]="
                 product.images[0]?.url ||
                 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'
               "
               [alt]="product.images[0]?.altText || product.name"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <!-- Deal badge -->
             <div
               *ngIf="product.isDeal"
-              class="absolute top-3 left-3 bg-amber-500 text-stone-950 text-xs font-bold tracking-[0.15em] uppercase px-2 py-1"
+              class="absolute top-3 left-3 text-white text-xs font-bold tracking-[0.15em] uppercase px-2.5 py-1"
+              style="
+                font-family: 'DM Sans', sans-serif;
+                background: linear-gradient(135deg, #ef4444, #f97316);
+                border-radius: 2px;
+              "
             >
               Deal
             </div>
             <!-- Quick-view hint -->
             <div
               class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              style="background: rgba(15, 23, 42, 0.45)"
             >
               <div
-                class="bg-stone-950/80 backdrop-blur-sm text-stone-100 text-xs tracking-[0.2em] uppercase px-4 py-2 border border-stone-700"
+                class="text-white text-xs tracking-[0.2em] uppercase px-4 py-2"
+                style="
+                  font-family: 'DM Sans', sans-serif;
+                  background: rgba(255, 255, 255, 0.15);
+                  border: 1px solid rgba(255, 255, 255, 0.4);
+                  backdrop-filter: blur(4px);
+                  border-radius: 2px;
+                "
               >
                 View Product
               </div>
@@ -349,21 +502,27 @@
 
           <!-- Info -->
           <div
-            class="p-5 flex flex-col gap-2 flex-1 border-t border-stone-800/60"
+            class="p-5 flex flex-col gap-2 flex-1"
+            style="border-top: 1px solid #f1f5f9"
           >
             <h3
-              class="text-sm text-stone-300 group-hover:text-stone-100 transition-colors leading-snug truncate tracking-wide"
+              class="text-sm leading-snug truncate tracking-wide transition-colors"
+              style="font-family: 'DM Sans', sans-serif; color: #334155"
             >
               {{ product.name }}
             </h3>
             <div class="flex items-center gap-1.5 mt-auto pt-2">
-              <span class="text-amber-400 text-xs">★</span>
-              <span class="text-xs text-stone-500">{{
-                product.averageRating
-              }}</span>
+              <span style="color: #f59e0b; font-size: 12px">★</span>
+              <span
+                class="text-xs"
+                style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+                >{{ product.averageRating }}</span
+              >
             </div>
             <div class="flex items-baseline gap-2">
-              <span class="text-base font-semibold text-amber-400"
+              <span
+                class="text-base font-bold"
+                style="color: #3b82f6; font-family: 'DM Sans', sans-serif"
                 >${{ product.discountedPrice || product.price }}</span
               >
               <span
@@ -371,7 +530,8 @@
                   product.discountedPrice &&
                   product.discountedPrice !== product.price
                 "
-                class="text-xs text-stone-600 line-through"
+                class="text-xs line-through"
+                style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
                 >${{ product.price }}</span
               >
             </div>
@@ -383,7 +543,13 @@
       <div class="flex md:hidden justify-center mt-10">
         <a
           routerLink="/products"
-          class="inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-amber-400 transition-colors border border-stone-700 hover:border-amber-500 px-6 py-3"
+          class="inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase transition-all px-6 py-3"
+          style="
+            font-family: 'DM Sans', sans-serif;
+            color: #3b82f6;
+            border: 1.5px solid #3b82f6;
+            border-radius: 2px;
+          "
         >
           View All Products
         </a>
@@ -394,30 +560,43 @@
   <!-- Thin divider -->
   <div class="max-w-7xl mx-auto px-8 md:px-16">
     <div
-      class="h-px bg-gradient-to-r from-transparent via-stone-800 to-transparent"
+      class="h-px"
+      style="
+        background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+      "
     ></div>
   </div>
 
   <!-- ── POPULAR PRODUCTS ── -->
-  <section class="py-24 bg-stone-950">
+  <section class="py-24" style="background: #ffffff">
     <div class="max-w-7xl mx-auto px-8 md:px-16">
       <div class="flex items-end justify-between mb-14">
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <div class="h-px w-6 bg-amber-500"></div>
-            <span class="text-xs tracking-[0.3em] uppercase text-amber-500"
+            <div class="h-0.5 w-6" style="background: #0f766e"></div>
+            <span
+              class="text-xs tracking-[0.3em] uppercase font-bold"
+              style="font-family: 'DM Sans', sans-serif; color: #0f766e"
               >Trending</span
             >
           </div>
           <h2
-            class="text-4xl md:text-5xl font-normal text-stone-100 tracking-tight"
+            class="text-4xl md:text-5xl font-normal tracking-tight"
+            style="color: #0f172a"
           >
             Popular Products
           </h2>
         </div>
         <a
           routerLink="/products"
-          class="hidden md:inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-amber-400 transition-colors border-b border-transparent hover:border-amber-400 pb-0.5"
+          class="hidden md:inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase transition-colors pb-0.5"
+          style="
+            font-family: 'DM Sans', sans-serif;
+            color: #64748b;
+            border-bottom: 1px solid transparent;
+          "
+          onmouseover="this.style.color='#0f766e'; this.style.borderBottomColor='#0f766e'"
+          onmouseout="this.style.color='#64748b'; this.style.borderBottomColor='transparent'"
         >
           View All
           <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none">
@@ -435,49 +614,72 @@
       <!-- Alternating layout for first 2, then grid -->
       <div *ngIf="popularProducts.length > 0">
         <!-- Top 2: editorial large layout -->
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-px bg-stone-800/40 mb-px"
-        >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
           <div
             *ngFor="let product of popularProducts.slice(0, 2)"
-            class="group bg-stone-950 cursor-pointer hover:bg-stone-900/50 transition-colors duration-300"
+            class="group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+            style="
+              background: #ffffff;
+              border: 1px solid #f1f5f9;
+              border-radius: 6px;
+              overflow: hidden;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            "
             (click)="navigateToProduct(product._id)"
           >
-            <div class="aspect-[4/3] overflow-hidden relative bg-stone-900">
+            <div
+              class="aspect-[4/3] overflow-hidden relative"
+              style="background: #f8fafc"
+            >
               <img
                 [src]="
                   product.images[0]?.url ||
                   'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'
                 "
                 [alt]="product.images[0]?.altText || product.name"
-                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div
                 class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style="background: rgba(15, 23, 42, 0.4)"
               >
                 <div
-                  class="bg-stone-950/80 backdrop-blur-sm text-stone-100 text-xs tracking-[0.2em] uppercase px-4 py-2 border border-stone-700"
+                  class="text-white text-xs tracking-[0.2em] uppercase px-4 py-2"
+                  style="
+                    font-family: 'DM Sans', sans-serif;
+                    background: rgba(255, 255, 255, 0.15);
+                    border: 1px solid rgba(255, 255, 255, 0.4);
+                    backdrop-filter: blur(4px);
+                    border-radius: 2px;
+                  "
                 >
                   View Product
                 </div>
               </div>
             </div>
             <div
-              class="p-6 border-t border-stone-800/60 flex items-center justify-between"
+              class="p-6 flex items-center justify-between"
+              style="border-top: 1px solid #f1f5f9"
             >
               <div>
                 <h3
-                  class="text-base text-stone-200 group-hover:text-stone-100 transition-colors leading-snug mb-2 tracking-wide"
+                  class="text-base leading-snug mb-2 tracking-wide"
+                  style="font-family: 'DM Sans', sans-serif; color: #1e293b"
                 >
                   {{ product.name }}
                 </h3>
                 <div class="flex items-center gap-2">
-                  <span class="text-amber-400 text-xs"
-                    >★ {{ product.averageRating }}</span
+                  <span style="color: #f59e0b; font-size: 12px">★</span>
+                  <span
+                    class="text-xs"
+                    style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+                    >{{ product.averageRating }}</span
                   >
                 </div>
               </div>
-              <span class="text-lg font-semibold text-amber-400 shrink-0 ml-4"
+              <span
+                class="text-lg font-bold shrink-0 ml-4"
+                style="color: #0f766e; font-family: 'DM Sans', sans-serif"
                 >${{ product.discountedPrice || product.price }}</span
               >
             </div>
@@ -485,46 +687,70 @@
         </div>
 
         <!-- Remaining: 4-col grid -->
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-stone-800/40"
-        >
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <div
             *ngFor="let product of popularProducts.slice(2)"
-            class="group bg-stone-950 cursor-pointer hover:bg-stone-900/60 transition-colors duration-300"
+            class="group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+            style="
+              background: #ffffff;
+              border: 1px solid #f1f5f9;
+              border-radius: 6px;
+              overflow: hidden;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            "
             (click)="navigateToProduct(product._id)"
           >
-            <div class="aspect-square overflow-hidden relative bg-stone-900">
+            <div
+              class="aspect-square overflow-hidden relative"
+              style="background: #f8fafc"
+            >
               <img
                 [src]="
                   product.images[0]?.url ||
                   'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'
                 "
                 [alt]="product.images[0]?.altText || product.name"
-                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div
                 class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style="background: rgba(15, 23, 42, 0.4)"
               >
                 <div
-                  class="bg-stone-950/80 backdrop-blur-sm text-stone-100 text-xs tracking-[0.2em] uppercase px-4 py-2 border border-stone-700"
+                  class="text-white text-xs tracking-[0.2em] uppercase px-4 py-2"
+                  style="
+                    font-family: 'DM Sans', sans-serif;
+                    background: rgba(255, 255, 255, 0.15);
+                    border: 1px solid rgba(255, 255, 255, 0.4);
+                    backdrop-filter: blur(4px);
+                    border-radius: 2px;
+                  "
                 >
                   View Product
                 </div>
               </div>
             </div>
-            <div class="p-5 flex flex-col gap-2 border-t border-stone-800/60">
+            <div
+              class="p-5 flex flex-col gap-2"
+              style="border-top: 1px solid #f1f5f9"
+            >
               <h3
-                class="text-sm text-stone-300 group-hover:text-stone-100 transition-colors leading-snug truncate tracking-wide"
+                class="text-sm leading-snug truncate tracking-wide"
+                style="font-family: 'DM Sans', sans-serif; color: #334155"
               >
                 {{ product.name }}
               </h3>
               <div class="flex items-center gap-1.5">
-                <span class="text-amber-400 text-xs">★</span>
-                <span class="text-xs text-stone-500">{{
-                  product.averageRating
-                }}</span>
+                <span style="color: #f59e0b; font-size: 12px">★</span>
+                <span
+                  class="text-xs"
+                  style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+                  >{{ product.averageRating }}</span
+                >
               </div>
-              <span class="text-base font-semibold text-amber-400"
+              <span
+                class="text-base font-bold"
+                style="color: #0f766e; font-family: 'DM Sans', sans-serif"
                 >${{ product.discountedPrice || product.price }}</span
               >
             </div>
@@ -536,7 +762,13 @@
       <div class="flex md:hidden justify-center mt-10">
         <a
           routerLink="/products"
-          class="inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-amber-400 transition-colors border border-stone-700 hover:border-amber-500 px-6 py-3"
+          class="inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase transition-all px-6 py-3"
+          style="
+            font-family: 'DM Sans', sans-serif;
+            color: #0f766e;
+            border: 1.5px solid #0f766e;
+            border-radius: 2px;
+          "
         >
           View All Products
         </a>
@@ -545,29 +777,47 @@
   </section>
 
   <!-- ── FOOTER STRIP ── -->
-  <footer class="border-t border-stone-800 bg-stone-950 py-10">
+  <footer
+    class="py-10"
+    style="border-top: 1px solid #e2e8f0; background: #f8fafc"
+  >
     <div
       class="max-w-7xl mx-auto px-8 md:px-16 flex flex-col sm:flex-row items-center justify-between gap-4"
     >
-      <span class="text-xs tracking-[0.3em] uppercase text-stone-600"
+      <span
+        class="text-xs tracking-[0.3em] uppercase"
+        style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
         >© 2024 Your Store</span
       >
       <div class="flex items-center gap-6">
         <a
           routerLink="/products"
-          class="text-xs tracking-[0.2em] uppercase text-stone-600 hover:text-amber-400 transition-colors"
+          class="text-xs tracking-[0.2em] uppercase transition-colors"
+          style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+          onmouseover="this.style.color='#3b82f6'"
+          onmouseout="this.style.color='#94a3b8'"
           >Shop</a
         >
         <a
           routerLink="/categories"
-          class="text-xs tracking-[0.2em] uppercase text-stone-600 hover:text-amber-400 transition-colors"
+          class="text-xs tracking-[0.2em] uppercase transition-colors"
+          style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
+          onmouseover="this.style.color='#3b82f6'"
+          onmouseout="this.style.color='#94a3b8'"
           >Categories</a
         >
-        <span class="text-stone-800">·</span>
-        <span class="text-xs tracking-[0.2em] uppercase text-stone-600"
+        <span style="color: #e2e8f0">·</span>
+        <span
+          class="text-xs tracking-[0.2em] uppercase"
+          style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
           >Free shipping on orders over $50</span
         >
       </div>
     </div>
+    <!-- Bottom accent bar -->
+    <div
+      class="mt-8 h-1"
+      style="background: linear-gradient(90deg, #3b82f6, #0f766e, #f59e0b)"
+    ></div>
   </footer>
 </div>
