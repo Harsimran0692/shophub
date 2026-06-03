@@ -2,5 +2,5 @@ export const environment = {
   production: true,
   apiUrl: 'https://shophub-nfyt.onrender.com/api',
   googleClientId:
-    '994490809525-7mi325ktl359blvh6bmor166oi6rkuu1.apps.googleusercontent.com',
+    '134919760637-7sa4p3otrnfr5hj685ru3qd39ue1f71i.apps.googleusercontent.com',
 };
