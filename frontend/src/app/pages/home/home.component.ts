@@ -4,6 +4,7 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
+  OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -16,7 +17,7 @@ import { Product, Category } from '../../models/product.interface';
   imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('carouselTrack') carouselTrack!: ElementRef;
   featuredProducts: Product[] = [];
   popularProducts: Product[] = [];
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   loading = true;
   currentIndex = 0;
   itemsPerView = 4;
+  private resizeListener = () => this.updateItemsPerView();
 
   private readonly SLOW_THRESHOLD_MS = 10000;
   private categoriesTimer?: ReturnType<typeof setTimeout>;
@@ -47,6 +49,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     clearTimeout(this.categoriesTimer);
     clearTimeout(this.featuredTimer);
     clearTimeout(this.popularTimer);
+    window.removeEventListener('resize', this.resizeListener);
   }
 
   ngAfterViewInit() {
@@ -64,6 +67,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       next: (products) => {
         this.featuredProducts = products;
         this.isFeaturedLoading = false;
+        this.showFeaturedSlowMsg = false;
       },
       error: (error) => {
         console.error('Error loading featured products:', error);
@@ -79,6 +83,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       next: (products) => {
         this.popularProducts = products;
         this.isPopularLoading = false;
+        this.showPopularSlowMsg = false;
       },
       error: (error) => {
         console.error('Error loading popular products:', error);
@@ -94,6 +99,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       next: (categories) => {
         this.categories = categories;
         this.isCategoriesLoading = false;
+        this.showCategoriesSlowMsg = false;
       },
       error: (error) => {
         console.error('Error loading categories:', error);
