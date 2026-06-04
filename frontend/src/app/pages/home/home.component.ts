@@ -25,10 +25,28 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentIndex = 0;
   itemsPerView = 4;
 
+  private readonly SLOW_THRESHOLD_MS = 10000;
+  private categoriesTimer?: ReturnType<typeof setTimeout>;
+  private featuredTimer?: ReturnType<typeof setTimeout>;
+  private popularTimer?: ReturnType<typeof setTimeout>;
+
+  isCategoriesLoading = true;
+  isFeaturedLoading = true;
+  isPopularLoading = true;
+
+  showPopularSlowMsg = false;
+  showFeaturedSlowMsg = false;
+  showCategoriesSlowMsg = false;
+
   constructor(private productService: ProductService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadData();
+  }
+  ngOnDestroy(): void {
+    clearTimeout(this.categoriesTimer);
+    clearTimeout(this.featuredTimer);
+    clearTimeout(this.popularTimer);
   }
 
   ngAfterViewInit() {
@@ -37,31 +55,45 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   private loadData(): void {
+    this.featuredTimer = setTimeout(() => {
+      if (this.isFeaturedLoading) this.showFeaturedSlowMsg = true;
+    }, this.SLOW_THRESHOLD_MS);
+
     // Load featured products
     this.productService.getFeaturedProducts().subscribe({
       next: (products) => {
         this.featuredProducts = products;
+        this.isFeaturedLoading = false;
       },
       error: (error) => {
         console.error('Error loading featured products:', error);
       },
     });
 
+    this.popularTimer = setTimeout(() => {
+      if (this.isPopularLoading) this.showPopularSlowMsg = true;
+    }, this.SLOW_THRESHOLD_MS);
+
     // Load popular products
     this.productService.getPopularProducts().subscribe({
       next: (products) => {
         this.popularProducts = products;
+        this.isPopularLoading = false;
       },
       error: (error) => {
         console.error('Error loading popular products:', error);
       },
     });
 
+    this.categoriesTimer = setTimeout(() => {
+      if (this.isCategoriesLoading) this.showCategoriesSlowMsg = true;
+    }, this.SLOW_THRESHOLD_MS);
+
     // Load categories
     this.productService.getCategories().subscribe({
       next: (categories) => {
         this.categories = categories;
-        this.loading = false;
+        this.isCategoriesLoading = false;
       },
       error: (error) => {
         console.error('Error loading categories:', error);

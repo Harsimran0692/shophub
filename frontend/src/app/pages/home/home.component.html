@@ -14,7 +14,6 @@
       );
     "
   >
-    <!-- Decorative background shapes -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
       <div
         class="absolute -top-32 -right-32 w-[700px] h-[700px] rounded-full opacity-30"
@@ -34,7 +33,6 @@
           );
         "
       ></div>
-      <!-- Subtle grid pattern -->
       <div
         class="absolute inset-0 opacity-[0.03]"
         style="
@@ -44,19 +42,14 @@
         "
       ></div>
     </div>
-
-    <!-- Top accent line -->
     <div
       class="absolute top-0 left-0 right-0 h-1"
       style="background: linear-gradient(90deg, #3b82f6, #0f766e, #f59e0b)"
     ></div>
-
-    <!-- Hero content -->
     <div
       class="relative z-10 px-8 md:px-16 pb-20 pt-20 max-w-7xl mx-auto w-full"
     >
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-end">
-        <!-- Left: Text -->
         <div>
           <div class="flex items-center gap-3 mb-8">
             <div class="h-0.5 w-10" style="background: #f59e0b"></div>
@@ -122,8 +115,6 @@
             </a>
           </div>
         </div>
-
-        <!-- Right: Stats -->
         <div class="lg:text-right">
           <div
             class="inline-grid grid-cols-2 gap-px shadow-2xl"
@@ -178,8 +169,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Bottom rule -->
     <div
       class="absolute bottom-0 left-0 right-0 h-px"
       style="
@@ -191,7 +180,7 @@
   <!-- ── CATEGORIES ── -->
   <section class="py-24" style="background: #ffffff">
     <div class="max-w-7xl mx-auto px-8 md:px-16">
-      <!-- Section header -->
+      <!-- HEADING — always visible -->
       <div class="flex items-end justify-between mb-14">
         <div>
           <div class="flex items-center gap-3 mb-4">
@@ -233,8 +222,37 @@
         </a>
       </div>
 
-      <!-- Carousel -->
-      <div *ngIf="categories.length > 0" class="relative">
+      <!-- SKELETON -->
+      <ng-container *ngIf="isCategoriesLoading">
+        <div class="flex gap-4 overflow-hidden">
+          <div
+            *ngFor="let i of [1, 2, 3, 4, 5]"
+            class="flex-shrink-0 w-[240px] flex flex-col gap-3"
+          >
+            <div class="skeleton w-full aspect-[3/4]"></div>
+            <div class="skeleton h-3.5 w-28"></div>
+          </div>
+        </div>
+        <div class="flex gap-3 mt-8">
+          <div class="skeleton w-10 h-10" style="border-radius: 50%"></div>
+          <div class="skeleton w-10 h-10" style="border-radius: 50%"></div>
+        </div>
+        <!-- Slow-load warning -->
+        <div *ngIf="showCategoriesSlowMsg" class="slow-load-banner">
+          <span class="slow-load-dot"></span>
+          <p class="slow-load-text">
+            <strong>Taking longer than usual&hellip;</strong>
+            The server may be warming up. Categories will appear shortly &mdash;
+            no need to refresh.
+          </p>
+        </div>
+      </ng-container>
+
+      <!-- REAL CONTENT -->
+      <div
+        *ngIf="!isCategoriesLoading && categories.length > 0"
+        class="relative"
+      >
         <div class="carousel overflow-hidden">
           <div
             class="flex gap-4 transition-transform duration-500 ease-in-out"
@@ -245,7 +263,6 @@
               class="flex-shrink-0 w-[240px] md:w-[280px] cursor-pointer group"
               (click)="navigateToCategory(category._id)"
             >
-              <!-- Image -->
               <div
                 class="aspect-[3/4] overflow-hidden mb-4 relative"
                 style="background: #f1f5f9; border-radius: 4px"
@@ -256,7 +273,6 @@
                   class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   style="opacity: 0.92"
                 />
-                <!-- Overlay -->
                 <div
                   class="absolute inset-0"
                   style="
@@ -267,7 +283,6 @@
                     );
                   "
                 ></div>
-                <!-- Corner accents on hover -->
                 <div
                   class="absolute top-3 right-3 w-6 h-6 transition-all duration-500"
                   style="
@@ -277,12 +292,10 @@
                   [style.borderTopColor]="'rgba(59,130,246,0)'"
                 ></div>
               </div>
-              <!-- Label -->
               <div class="flex items-center justify-between">
                 <h3
                   class="text-sm tracking-[0.15em] uppercase transition-colors duration-300"
                   style="font-family: 'DM Sans', sans-serif; color: #334155"
-                  [style.color]="''"
                 >
                   {{ category.name }}
                 </h3>
@@ -304,8 +317,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Carousel nav -->
         <div class="flex items-center gap-3 mt-8">
           <button
             (click)="prevSlide()"
@@ -369,6 +380,7 @@
   <!-- ── FEATURED PRODUCTS ── -->
   <section class="py-24" style="background: #f8fafc">
     <div class="max-w-7xl mx-auto px-8 md:px-16">
+      <!-- HEADING — always visible -->
       <div class="flex items-end justify-between mb-14">
         <div>
           <div class="flex items-center gap-3 mb-4">
@@ -410,8 +422,53 @@
         </a>
       </div>
 
+      <!-- SKELETON -->
+      <ng-container *ngIf="isFeaturedLoading">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div
+            *ngFor="let i of [1, 2, 3, 4]; let idx = index"
+            style="
+              border-radius: 6px;
+              overflow: hidden;
+              background: #fff;
+              border: 1px solid #f1f5f9;
+            "
+          >
+            <div
+              class="skeleton aspect-square w-full"
+              style="border-radius: 0"
+              [style.animation-delay]="idx * 0.1 + 's'"
+            ></div>
+            <div class="flex flex-col gap-2 p-5">
+              <div
+                class="skeleton h-3.5 w-10/12"
+                [style.animation-delay]="idx * 0.1 + 0.05 + 's'"
+              ></div>
+              <div
+                class="skeleton h-3 w-1/2"
+                [style.animation-delay]="idx * 0.1 + 0.1 + 's'"
+              ></div>
+              <div
+                class="skeleton h-5 w-7/12 mt-1"
+                [style.animation-delay]="idx * 0.1 + 0.15 + 's'"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <!-- Slow-load warning -->
+        <div *ngIf="showFeaturedSlowMsg" class="slow-load-banner">
+          <span class="slow-load-dot"></span>
+          <p class="slow-load-text">
+            <strong>Taking longer than usual&hellip;</strong>
+            The server may be warming up. Featured products will appear shortly
+            &mdash; no need to refresh.
+          </p>
+        </div>
+      </ng-container>
+
+      <!-- REAL CONTENT -->
       <div
-        *ngIf="featuredProducts.length > 0"
+        *ngIf="!isFeaturedLoading && featuredProducts.length > 0"
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
       >
         <div
@@ -426,7 +483,6 @@
           "
           (click)="navigateToProduct(product._id)"
         >
-          <!-- Image -->
           <div
             class="aspect-square overflow-hidden relative"
             style="background: #f8fafc"
@@ -439,7 +495,6 @@
               [alt]="product.images[0]?.altText || product.name"
               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <!-- Deal badge -->
             <div
               *ngIf="product.isDeal"
               class="absolute top-3 left-3 text-white text-xs font-bold tracking-[0.15em] uppercase px-2.5 py-1"
@@ -451,7 +506,6 @@
             >
               Deal
             </div>
-            <!-- Quick-view hint -->
             <div
               class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               style="background: rgba(15, 23, 42, 0.45)"
@@ -470,8 +524,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Info -->
           <div
             class="p-5 flex flex-col gap-2 flex-1"
             style="border-top: 1px solid #f1f5f9"
@@ -494,8 +546,9 @@
               <span
                 class="text-base font-bold"
                 style="color: #3b82f6; font-family: 'DM Sans', sans-serif"
-                >${{ product.discountedPrice || product.price }}</span
               >
+                ${{ product.discountedPrice || product.price }}
+              </span>
               <span
                 *ngIf="
                   product.discountedPrice &&
@@ -503,15 +556,19 @@
                 "
                 class="text-xs line-through"
                 style="font-family: 'DM Sans', sans-serif; color: #94a3b8"
-                >${{ product.price }}</span
               >
+                ${{ product.price }}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Mobile view-all -->
-      <div class="flex md:hidden justify-center mt-10">
+      <div
+        *ngIf="!isFeaturedLoading"
+        class="flex md:hidden justify-center mt-10"
+      >
         <a
           routerLink="/products"
           class="inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase transition-all px-6 py-3"
@@ -541,6 +598,7 @@
   <!-- ── POPULAR PRODUCTS ── -->
   <section class="py-24" style="background: #ffffff">
     <div class="max-w-7xl mx-auto px-8 md:px-16">
+      <!-- HEADING — always visible -->
       <div class="flex items-end justify-between mb-14">
         <div>
           <div class="flex items-center gap-3 mb-4">
@@ -582,8 +640,87 @@
         </a>
       </div>
 
-      <!-- Alternating layout for first 2, then grid -->
-      <div *ngIf="popularProducts.length > 0">
+      <!-- SKELETON -->
+      <ng-container *ngIf="isPopularLoading">
+        <!-- Top 2 editorial -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+          <div
+            *ngFor="let i of [1, 2]; let idx = index"
+            style="
+              border-radius: 6px;
+              overflow: hidden;
+              background: #fff;
+              border: 1px solid #f1f5f9;
+            "
+          >
+            <div
+              class="skeleton w-full"
+              style="aspect-ratio: 4/3; border-radius: 0"
+              [style.animation-delay]="idx * 0.12 + 's'"
+            ></div>
+            <div class="flex items-center justify-between p-6">
+              <div class="flex flex-col gap-2 flex-1">
+                <div
+                  class="skeleton h-4 w-40"
+                  [style.animation-delay]="idx * 0.12 + 0.05 + 's'"
+                ></div>
+                <div
+                  class="skeleton h-3 w-20"
+                  [style.animation-delay]="idx * 0.12 + 0.1 + 's'"
+                ></div>
+              </div>
+              <div
+                class="skeleton h-6 w-16 ml-4 flex-shrink-0"
+                [style.animation-delay]="idx * 0.12 + 0.15 + 's'"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <!-- Remaining 4-col -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div
+            *ngFor="let i of [1, 2, 3, 4]; let idx = index"
+            style="
+              border-radius: 6px;
+              overflow: hidden;
+              background: #fff;
+              border: 1px solid #f1f5f9;
+            "
+          >
+            <div
+              class="skeleton aspect-square w-full"
+              style="border-radius: 0"
+              [style.animation-delay]="idx * 0.1 + 0.2 + 's'"
+            ></div>
+            <div class="flex flex-col gap-2 p-5">
+              <div
+                class="skeleton h-3.5 w-9/12"
+                [style.animation-delay]="idx * 0.1 + 0.25 + 's'"
+              ></div>
+              <div
+                class="skeleton h-3 w-1/2"
+                [style.animation-delay]="idx * 0.1 + 0.3 + 's'"
+              ></div>
+              <div
+                class="skeleton h-5 w-3/5"
+                [style.animation-delay]="idx * 0.1 + 0.35 + 's'"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <!-- Slow-load warning -->
+        <div *ngIf="showPopularSlowMsg" class="slow-load-banner">
+          <span class="slow-load-dot"></span>
+          <p class="slow-load-text">
+            <strong>Taking longer than usual&hellip;</strong>
+            The server may be warming up. Popular products will appear shortly
+            &mdash; no need to refresh.
+          </p>
+        </div>
+      </ng-container>
+
+      <!-- REAL CONTENT -->
+      <div *ngIf="!isPopularLoading && popularProducts.length > 0">
         <!-- Top 2: editorial large layout -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
           <div
@@ -651,12 +788,12 @@
               <span
                 class="text-lg font-bold shrink-0 ml-4"
                 style="color: #0f766e; font-family: 'DM Sans', sans-serif"
-                >${{ product.discountedPrice || product.price }}</span
               >
+                ${{ product.discountedPrice || product.price }}
+              </span>
             </div>
           </div>
         </div>
-
         <!-- Remaining: 4-col grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <div
@@ -722,15 +859,19 @@
               <span
                 class="text-base font-bold"
                 style="color: #0f766e; font-family: 'DM Sans', sans-serif"
-                >${{ product.discountedPrice || product.price }}</span
               >
+                ${{ product.discountedPrice || product.price }}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Mobile view-all -->
-      <div class="flex md:hidden justify-center mt-10">
+      <div
+        *ngIf="!isPopularLoading"
+        class="flex md:hidden justify-center mt-10"
+      >
         <a
           routerLink="/products"
           class="inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase transition-all px-6 py-3"
@@ -752,7 +893,6 @@
     class="py-10"
     style="border-top: 1px solid #e2e8f0; background: #f8fafc"
   >
-    <!-- Bottom accent bar -->
     <div
       class="mt-8 h-1"
       style="background: linear-gradient(90deg, #3b82f6, #0f766e, #f59e0b)"
